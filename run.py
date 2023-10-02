@@ -34,6 +34,10 @@ centers = variants_data[user_variant]["imageAutoGUIData"]["themes"][theme]["cent
 def position_to_coord(start, end):
     start_cord = None
     end_cord = None
+
+    start = start[7:]
+    end = end[7:]
+
     if len(start) != len(end):
         print("error")
         exit()
@@ -63,3 +67,44 @@ Dynamic_URL = Static_URL + starting_position
 
 #List of available moves from starting position
 moves_data = requests.get(url = Dynamic_URL).json()['response']['moves']
+
+def pick_best_position(moves):
+    position_values = {}
+    for i in range(len(moves)):
+        if moves[i]['moveValue'] not in position_values:
+            position_values[moves[i]['moveValue']] = [moves[i]['position']]
+        else:
+            position_values[moves[i]['moveValue']].append(moves[i]['position'])
+
+    if 'win' in position_values and len(position_values['win']) > 0:
+        return position_values['win'][0]
+    elif 'draw' in position_values and len(position_values['draw']) > 0:
+        return position_values['draw'][0]
+    elif 'lose' in position_values and len(position_values['lose']) > 0:
+        return position_values['lose'][0]
+    else:
+        print('error: in pick_best_postion')
+        exit()
+
+A_turn = True
+while(len(moves_data) > 0):
+    if A_turn:
+        new_position = pick_best_position(moves_data)
+        move_coords = position_to_coord(starting_position, new_position)
+
+        print("A : ", move_coords)
+
+        Dynamic_URL = Static_URL + new_position
+        moves_data = requests.get(url = Dynamic_URL).json()['response']['moves']
+        starting_position = new_position
+        A_turn = False
+    else:
+        new_position = pick_best_position(moves_data)
+        move_coords = position_to_coord(starting_position, new_position)
+
+        print("B : ", move_coords)
+
+        Dynamic_URL = Static_URL + new_position
+        moves_data = requests.get(url = Dynamic_URL).json()['response']['moves']
+        starting_position = new_position
+        A_turn = True
