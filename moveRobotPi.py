@@ -10,7 +10,7 @@ def play(before, after):
     
     square_length = 250/3
 
-    x = (before[0] - 1) * square_length
+    x = ((before[0] - 1) * square_length) - 125
     y = (before[1] - 1) * square_length
     z = 150
 
@@ -29,7 +29,7 @@ def play(before, after):
     if after == None:
         after = [4.5, 1.5]
 
-    x = (after[0] - 1) * square_length
+    x = ((after[0] - 1) * square_length) - 125
     y = (after[1] - 1) * square_length
     z = 150
 
