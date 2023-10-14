@@ -1,4 +1,5 @@
 import requests
+import moveRobotPi
 
 URL = "https://nyc.cs.berkeley.edu/universal/v1/games/"
 
@@ -93,6 +94,7 @@ while(len(moves_data) > 0):
         move_coords = position_to_coord(starting_position, new_position)
 
         print("A : ", move_coords)
+        moveRobotPi.play(move_coords[0], move_coords[1])
 
         Dynamic_URL = Static_URL + new_position
         moves_data = requests.get(url = Dynamic_URL).json()['response']['moves']
@@ -103,6 +105,10 @@ while(len(moves_data) > 0):
         move_coords = position_to_coord(starting_position, new_position)
 
         print("B : ", move_coords)
+        flag = False
+        while not flag:
+            user = input("Enter y and Press ENTER: ")
+            flag = user == 'y'
 
         Dynamic_URL = Static_URL + new_position
         moves_data = requests.get(url = Dynamic_URL).json()['response']['moves']
