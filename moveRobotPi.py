@@ -1,4 +1,5 @@
 from pymycobot.mycobot import MyCobot
+import time
 
 board_size = 250
 dim = 3
@@ -18,9 +19,12 @@ def play(before, after):
     rz = -50
 
     mc.send_coords([x, y, z, rx, ry, rz], 20)
+    time.sleep(3)
     mc.send_coords([x, y, z, 100, rx, ry, rz], 20)
+    time.sleep(3)
 
     mc.set_gripper_state(0, 20)
+    time.sleep(3)
 
     if after == None:
         after = [4.5, 1.5]
@@ -30,8 +34,11 @@ def play(before, after):
     z = 150
 
     mc.send_coords([x, y, z, rx, ry, rz], 20)
+    time.sleep(3)
     mc.send_coords([x, y, z, 100, rx, ry, rz], 20)
-
+    time.sleep(3)
     mc.set_gripper_state(1, 20)
+    time.sleep(3)
 
     mc.send_coords([0, 100, z, rx, ry, rz], 20)
+    time.sleep(3)
