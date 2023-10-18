@@ -33,8 +33,8 @@ def play(before, after):
     if after == None:
         after = [4.5, 1.5]
 
-    x = ((after[0] - 1) * square_length) - 125
-    y = (after[1] - 1) * square_length
+    x = ((after[0] - 1) * square_length) - 75
+    y = (after[1] - 1) * square_length + 120
     z = 150
 
     mc.send_coords([x, y, 100, rx, ry, rz], 20)
