@@ -4,7 +4,7 @@ import time
 board_size = 150
 dim = 3
 
-
+#gripper: Open 0, Close 1
 def play(before, after):
     mc = MyCobot("/dev/ttyAMA0", 1000000)
     
@@ -20,7 +20,7 @@ def play(before, after):
     ry = -5
     rz = 125
 
-    print(x, y, z)
+    print("Before: ", x, y, z)
 
     mc.send_coords([x, y, z, rx, ry, rz], 20)
     time.sleep(delay)
@@ -36,6 +36,8 @@ def play(before, after):
     x = ((after[0] - 1) * square_length) - 75
     y = (after[1] - 1) * square_length + 120
     z = 150
+
+    print("After: ", x, y, z)
 
     mc.send_coords([x, y, 100, rx, ry, rz], 20)
     time.sleep(delay)
