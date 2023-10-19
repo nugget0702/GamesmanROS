@@ -27,8 +27,7 @@ def play(before, after):
     mc.send_coords([x, y, 125, rx, ry, rz], 20)
     time.sleep(delay)
 
-    mc.set_gripper_value(97, 20)
-    #mc.set_gripper_state(1, 20)
+    mc.set_gripper_state(1, 20)
     time.sleep(delay)
 
     if after == None:
