@@ -94,6 +94,10 @@ while(len(moves_data) > 0):
         move_coords = position_to_coord(starting_position, new_position)
 
         print("A : ", move_coords)
+        flag = False
+        while not flag:
+            user = input("Enter y and Press ENTER: ")
+            flag = user == 'y'
         moveRobotPi.play(move_coords[0], move_coords[1])
 
         Dynamic_URL = Static_URL + new_position
@@ -109,6 +113,7 @@ while(len(moves_data) > 0):
         while not flag:
             user = input("Enter y and Press ENTER: ")
             flag = user == 'y'
+        moveRobotPi.play(move_coords[0], move_coords[1])
 
         Dynamic_URL = Static_URL + new_position
         moves_data = requests.get(url = Dynamic_URL).json()['response']['moves']
