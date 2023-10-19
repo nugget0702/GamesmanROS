@@ -24,7 +24,7 @@ def play(before, after):
 
     mc.send_coords([x, y, z, rx, ry, rz], 20)
     time.sleep(delay)
-    mc.send_coords([x, y, 125, rx, ry, rz], 20)
+    mc.send_coords([x, y, 100, rx, ry, rz], 20)
     time.sleep(delay)
 
     mc.set_gripper_state(1, 20)
@@ -39,7 +39,7 @@ def play(before, after):
 
     print("After: ", x, y, z)
 
-    mc.send_coords([x, y, 125, rx, ry, rz], 20)
+    mc.send_coords([x, y, 100, rx, ry, rz], 20)
     time.sleep(delay)
     mc.set_gripper_state(0, 20)
     time.sleep(delay)
