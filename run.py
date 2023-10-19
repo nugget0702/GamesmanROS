@@ -95,9 +95,9 @@ while(len(moves_data) > 0):
 
         print("A : ", move_coords)
         flag = False
-        while not flag:
-            user = input("Enter y and Press ENTER: ")
-            flag = user == 'y'
+        # while not flag:
+        #     user = input("Enter y and Press ENTER: ")
+        #     flag = user == 'y'
         moveRobotPi.play(move_coords[0], move_coords[1])
 
         Dynamic_URL = Static_URL + new_position
@@ -109,10 +109,10 @@ while(len(moves_data) > 0):
         move_coords = position_to_coord(starting_position, new_position)
 
         print("B : ", move_coords)
-        flag = False
-        while not flag:
-            user = input("Enter y and Press ENTER: ")
-            flag = user == 'y'
+        # flag = False
+        # while not flag:
+        #     user = input("Enter y and Press ENTER: ")
+        #     flag = user == 'y'
         moveRobotPi.play(move_coords[0], move_coords[1])
 
         Dynamic_URL = Static_URL + new_position
