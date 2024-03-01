@@ -7,8 +7,8 @@ dim = 3
 #gripper: Open 0, Close 1
 def play(before, after):
     mc = MyCobot("/dev/ttyAMA0", 1000000)
-    
     square_length = board_size/dim
+    mc.move_round()
     
     delay = 3
 
@@ -24,16 +24,16 @@ def play(before, after):
 
     print("Before: ", x, y, z)
 
-    mc.send_coords([x, y, z, rx, ry, rz], 20, 1)
-    time.sleep(delay)
-    mc.send_coords([x, y, pickup_z, rx, ry, rz], 20, 1)
-    time.sleep(delay)
+    # mc.send_coords([x, y, z, rx, ry, rz], 20, 1)
+    # time.sleep(delay)
+    # mc.send_coords([x, y, pickup_z, rx, ry, rz], 20, 1)
+    # time.sleep(delay)
     
-    mc.set_gripper_state(1, 20)
-    time.sleep(delay)
+    # mc.set_gripper_state(1, 20)
+    # time.sleep(delay)
 
-    mc.send_coords([x, y, z, rx, ry, rz], 20, 1)
-    time.sleep(delay)
+    # mc.send_coords([x, y, z, rx, ry, rz], 20, 1)
+    # time.sleep(delay)
 
     if after == None:
         after = [4.5, 1.5]
@@ -44,13 +44,15 @@ def play(before, after):
 
     print("After: ", x, y, z)
 
-    mc.send_coords([x, y, z, rx, ry, rz], 20, 1)
-    time.sleep(delay)
-    mc.send_coords([x, y, pickup_z, rx, ry, rz], 20, 1)
-    time.sleep(delay)
-    mc.set_gripper_state(0, 20)
-    time.sleep(delay)
-    mc.send_coords([x, y, z, rx, ry, rz], 20, 1)
-    time.sleep(delay)
+    # mc.send_coords([x, y, z, rx, ry, rz], 20, 1)
+    # time.sleep(delay)
+    # mc.send_coords([x, y, pickup_z, rx, ry, rz], 20, 1)
+    # time.sleep(delay)
+    # mc.set_gripper_state(0, 20)
+    # time.sleep(delay)
+    # mc.send_coords([x, y, z, rx, ry, rz], 20, 1)
+    # time.sleep(delay)
 
-    mc.set_color
+    # mc.set_color
+
+    # mc.send_radians()
