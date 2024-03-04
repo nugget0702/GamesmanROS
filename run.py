@@ -108,7 +108,7 @@ while (len(moves_data) > 0):
         moveRobotPi.play(move_coords[0], move_coords[1])
 
         Dynamic_URL = Static_URL + new_position
-        moves_data = requests.get(url=Dynamic_URL).json()['response']['moves']
+        moves_data = requests.get(url=Dynamic_URL).json()['moves']
         starting_position = new_position
         A_turn = False
     else:
@@ -124,6 +124,6 @@ while (len(moves_data) > 0):
         moveRobotPi.play(move_coords[0], move_coords[1])
 
         Dynamic_URL = Static_URL + new_position
-        moves_data = requests.get(url=Dynamic_URL).json()['response']['moves']
+        moves_data = requests.get(url=Dynamic_URL).json()['moves']
         starting_position = new_position
         A_turn = True
