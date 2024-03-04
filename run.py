@@ -41,8 +41,8 @@ def position_to_coord(start, end):
     start_cord = None
     end_cord = None
 
-    start = start[7:]
-    end = end[7:]
+    start = start[2:]
+    end = end[2:]
 
     if len(start) != len(end):
         print("error")
@@ -113,6 +113,7 @@ while (len(moves_data) > 0):
         A_turn = False
     else:
         new_position = pick_best_position(moves_data)
+        print(starting_position, new_position)
         move_coords = position_to_coord(starting_position, new_position)
 
         print("B : ", move_coords)
