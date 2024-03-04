@@ -20,9 +20,7 @@ mapping["[4.5, 1.5]"] = [81.29, -25.75, -86.3, 22.93, 10.72, 45.87]
 
 #gripper: Open 0, Close 1
 def play(before, after):
-    mc = MyCobot("/dev/ttyAMA0", 1000000)
-    mc.move_round()
-    
+    mc = MyCobot("/dev/ttyAMA0", 1000000)    
     delay = 3
 
     mc.send_angles(mapping[str([before[0], before[1]])], 20)
