@@ -5,9 +5,9 @@ URL = "https://nyc.cs.berkeley.edu/universal/v1/"
 
 # Don't TOUCH Code blocks below!
 ######################### Get All Games #####################################
-games_data = requests.get(url=URL).json()['response']
+games_data = requests.get(url=URL).json()
 for i in range(len(games_data)):
-    print(i, " : ", games_data[i]['gameId'])
+    print(i, " : ", games_data[i]['name'])
 user_game = int(input("Pick the index of the game you want to play: "))
 
 URL = URL + games_data[user_game]["gameId"] + '/'
