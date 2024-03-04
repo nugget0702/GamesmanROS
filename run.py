@@ -6,29 +6,31 @@ URL = "https://nyc.cs.berkeley.edu/universal/v1/"
 # Don't TOUCH Code blocks below!
 ######################### Get All Games #####################################
 games_data = requests.get(url=URL).json()
+print(games_data)
 for i in range(len(games_data)):
     print(i, " : ", games_data[i]['name'])
 user_game = int(input("Pick the index of the game you want to play: "))
 
-URL = URL + games_data[user_game]["gameId"] + '/'
+URL = URL + games_data[user_game]["name"].lower() + '/'
 #############################################################################
 
 
 ############## Get Variant and Starting Positon #############################
-variants_data = requests.get(url=URL).json()['response']['variants']
+variants_data = requests.get(url=URL).json()['variants']
 for j in range(len(variants_data)):
-    print(j, " : ", variants_data[j]["variantId"])
+    print(j, " : ", variants_data[j]["id"])
 user_variant = int(input("Pick the index of the variant you want to play: "))
-variant = variants_data[user_variant]["variantId"]
-starting_position = variants_data[user_variant]["startPosition"]
+variant = variants_data[user_variant]["id"]
+URL = URL + variant + '/'
+variants_data = requests.get(url=URL).json()
+starting_position = variants_data["startPosition"]
 ##############################################################################
 
 
 ############################# Meta Data  #####################################
-Static_URL = URL + "variants/" + variant + "/positions/"
-theme = list(variants_data[user_variant]
-             ["imageAutoGUIData"]["themes"].keys())[0]
-centers = variants_data[user_variant]["imageAutoGUIData"]["themes"][theme]["centers"]
+Static_URL = URL + "/positions/?p="
+theme = list(variants_data["imageAutoGUIData"]["themes"].keys())[0]
+centers = variants_data["imageAutoGUIData"]["themes"][theme]["centers"]
 ###############################################################################
 
 # Input: starting position string and ending position string
@@ -71,7 +73,7 @@ def coor_to_position(postion, start, end):
 Dynamic_URL = Static_URL + starting_position
 
 # List of available moves from starting position
-moves_data = requests.get(url=Dynamic_URL).json()['response']['moves']
+moves_data = requests.get(url=Dynamic_URL).json()['moves']
 
 
 def pick_best_position(moves):
