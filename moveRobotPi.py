@@ -23,20 +23,26 @@ def play(before, after):
     mc = MyCobot("/dev/ttyAMA0", 1000000)    
     delay = 3
 
-    mc.send_angles(mapping[str([before[0] + 1, before[1] + 1])], 20)
+    mc.send_angles(mapping["lift"], 20)
+    time.sleep(delay)
+    mc.set_gripper_state(0, 20)
+    time.sleep(delay)
+
+    mc.send_angles(mapping[str([before[0] + 1, before[1]])], 20)
+    time.sleep(delay)
+    mc.set_gripper_state(1, 20)
     time.sleep(delay)
     mc.send_angles(mapping["lift"], 20)
     time.sleep(delay)
     
-    mc.set_gripper_state(1, 20)
-    time.sleep(delay)
+    
 
     
 
     if after == None:
         after = [4.5, 1.5]
 
-    mc.send_angles(mapping[str([after[0] + 1, after[1] + 1])], 20)
+    mc.send_angles(mapping[str([after[0] + 1, after[1]])], 20)
     time.sleep(delay)
     mc.set_gripper_state(0, 20)
     time.sleep(delay)
