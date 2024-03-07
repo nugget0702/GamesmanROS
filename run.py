@@ -5,30 +5,32 @@ URL = "https://nyc.cs.berkeley.edu/universal/v1/"
 
 # Don't TOUCH Code blocks below!
 ######################### Get All Games #####################################
-games_data = requests.get(url=URL).json()['response']
+games_data = requests.get(url=URL).json()
+print(games_data)
 for i in range(len(games_data)):
-    print(i, " : ", games_data[i]['gameId'])
+    print(i, " : ", games_data[i]['name'])
 user_game = int(input("Pick the index of the game you want to play: "))
 
-URL = URL + games_data[user_game]["gameId"] + '/'
+URL = URL + games_data[user_game]["name"].lower() + '/'
 #############################################################################
 
 
 ############## Get Variant and Starting Positon #############################
-variants_data = requests.get(url=URL).json()['response']['variants']
+variants_data = requests.get(url=URL).json()['variants']
 for j in range(len(variants_data)):
-    print(j, " : ", variants_data[j]["variantId"])
+    print(j, " : ", variants_data[j]["id"])
 user_variant = int(input("Pick the index of the variant you want to play: "))
-variant = variants_data[user_variant]["variantId"]
-starting_position = variants_data[user_variant]["startPosition"]
+variant = variants_data[user_variant]["id"]
+URL = URL + variant + '/'
+variants_data = requests.get(url=URL).json()
+starting_position = variants_data["startPosition"]
 ##############################################################################
 
 
 ############################# Meta Data  #####################################
-Static_URL = URL + "variants/" + variant + "/positions/"
-theme = list(variants_data[user_variant]
-             ["imageAutoGUIData"]["themes"].keys())[0]
-centers = variants_data[user_variant]["imageAutoGUIData"]["themes"][theme]["centers"]
+Static_URL = URL + "/positions/?p="
+theme = list(variants_data["imageAutoGUIData"]["themes"].keys())[0]
+centers = variants_data["imageAutoGUIData"]["themes"][theme]["centers"]
 ###############################################################################
 
 # Input: starting position string and ending position string
@@ -39,8 +41,8 @@ def position_to_coord(start, end):
     start_cord = None
     end_cord = None
 
-    start = start[7:]
-    end = end[7:]
+    start = start[2:]
+    end = end[2:]
 
     if len(start) != len(end):
         print("error")
@@ -71,7 +73,7 @@ def coor_to_position(postion, start, end):
 Dynamic_URL = Static_URL + starting_position
 
 # List of available moves from starting position
-moves_data = requests.get(url=Dynamic_URL).json()['response']['moves']
+moves_data = requests.get(url=Dynamic_URL).json()['moves']
 
 
 def pick_best_position(moves):
@@ -92,7 +94,6 @@ def pick_best_position(moves):
         print('error: in pick_best_postion')
         exit()
 
-
 A_turn = True
 while (len(moves_data) > 0):
     if A_turn:
@@ -101,27 +102,28 @@ while (len(moves_data) > 0):
 
         print("A : ", move_coords)
         flag = False
-        # while not flag:
-        #     user = input("Enter y and Press ENTER: ")
-        #     flag = user == 'y'
-        # moveRobotPi.play(move_coords[0], move_coords[1])
+        while not flag:
+            user = input("Enter y and Press ENTER: ")
+            flag = user == 'y'
+        moveRobotPi.play(move_coords[0], move_coords[1])
 
         Dynamic_URL = Static_URL + new_position
-        moves_data = requests.get(url=Dynamic_URL).json()['response']['moves']
+        moves_data = requests.get(url=Dynamic_URL).json()['moves']
         starting_position = new_position
         A_turn = False
     else:
         new_position = pick_best_position(moves_data)
+        print(starting_position, new_position)
         move_coords = position_to_coord(starting_position, new_position)
 
         print("B : ", move_coords)
-        # flag = False
-        # while not flag:
-        #     user = input("Enter y and Press ENTER: ")
-        #     flag = user == 'y'
-        # moveRobotPi.play(move_coords[0], move_coords[1])
+        flag = False
+        while not flag:
+            user = input("Enter y and Press ENTER: ")
+            flag = user == 'y'
+        moveRobotPi.play(move_coords[0], move_coords[1])
 
         Dynamic_URL = Static_URL + new_position
-        moves_data = requests.get(url=Dynamic_URL).json()['response']['moves']
+        moves_data = requests.get(url=Dynamic_URL).json()['moves']
         starting_position = new_position
         A_turn = True
