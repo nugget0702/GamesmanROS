@@ -1,0 +1,2 @@
+ik:move_arm:planning
+-DCATKIN_DEVEL_PREFIX=/home/er/Desktop/GamesmanROS/IK-FK-lab5/devel -DCMAKE_INSTALL_PREFIX=/home/er/Desktop/GamesmanROS/IK-FK-lab5/install -G Unix Makefiles
