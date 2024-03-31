@@ -80,6 +80,7 @@ def findPiece(ar_frame):
       piece.x = piece_location[0]
       piece.y = piece_location[1]
       piece.z = piece_location[2]
+      print(piece_location, type(piece_location[0]))
 
       #################################### end your code ###############
 
