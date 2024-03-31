@@ -42,11 +42,9 @@ def findPiece(ar_frame):
       
       #TODO MODIFY THIS OFFSET
       # Process trans to get your state error
-      offset_y = 0
-
 
       input_x = ar_tag_trans.transform.translation.x
-      input_y = ar_tag_trans.transform.translation.y + offset_y
+      input_y = ar_tag_trans.transform.translation.y
       input_z = ar_tag_trans.transform.translation.z
 
       print("Translation of Piece from camera: ", input_x, input_y, input_z)
