@@ -51,7 +51,7 @@ def findPiece(ar_frame):
 
       input_vector = np.array([input_x, input_y, input_z, 1]).T
 
-      gripper_trans = tfBuffer.lookup_transform("joint1", "gripper_base", rospy.Time())
+      gripper_trans = tfBuffer.lookup_transform("g_base", "gripper_base", rospy.Time())
       t_x = gripper_trans.transform.translation.x
       t_y = gripper_trans.transform.translation.y
       t_z = gripper_trans.transform.translation.z
