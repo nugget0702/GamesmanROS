@@ -42,21 +42,20 @@ def findPiece(ar_frame):
       
       #TODO MODIFY THIS OFFSET
       # Process trans to get your state error
-      offset_x = None
-      offset_y = None
-      offset_z = None
+      offset_y = -0.04
+      offset_z = -0.13
 
 
-      input_x = ar_tag_trans.transform.translation.x + offset_x
+      input_x = ar_tag_trans.transform.translation.x
       input_y = ar_tag_trans.transform.translation.y + offset_y
-      input_z = ar_tag_trans.transform.translation.z + offset_z
+      input_z = ar_tag_trans.transform.translation.z
 
       input_vector = np.array([input_x, input_y, input_z, 1]).T
 
       gripper_trans = tfBuffer.lookup_transform("joint1", "gripper_base", rospy.Time())
       t_x = gripper_trans.transform.translation.x
       t_y = gripper_trans.transform.translation.y
-      t_z = gripper_trans.transform.translation.z
+      t_z = gripper_trans.transform.translation.z + offset_z
 
       q_x = gripper_trans.transform.rotation.x
       q_y = gripper_trans.transform.rotation.y
