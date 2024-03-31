@@ -42,8 +42,7 @@ def findPiece(ar_frame):
       
       #TODO MODIFY THIS OFFSET
       # Process trans to get your state error
-      offset_y = -0.04
-      offset_z = -0.13
+      offset_y = 0.04
 
 
       input_x = ar_tag_trans.transform.translation.x
@@ -55,7 +54,7 @@ def findPiece(ar_frame):
       gripper_trans = tfBuffer.lookup_transform("joint1", "gripper_base", rospy.Time())
       t_x = gripper_trans.transform.translation.x
       t_y = gripper_trans.transform.translation.y
-      t_z = gripper_trans.transform.translation.z + offset_z
+      t_z = gripper_trans.transform.translation.z
 
       q_x = gripper_trans.transform.rotation.x
       q_y = gripper_trans.transform.rotation.y
@@ -82,7 +81,6 @@ def findPiece(ar_frame):
       piece.z = piece_location[2]
 
       #################################### end your code ###############
-
       pub.publish(piece)
     except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException) as e:
       print("error: ", e)
