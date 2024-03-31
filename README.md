@@ -27,11 +27,11 @@ We are using the [_mycobot280pi_](https://shop.elephantrobotics.com/products/myc
 
 * The default serial port name of mycobot 280-Pi version is "/dev/ttyAMA0", and the baud rate is 1000000.
 
-	`rosrun mycobot_280pi follow_display.py _port:=/dev/ttyAMA0 _baud:=1000000`
+	`rosrun mycobot_280pi follow_display_gripper.py _port:=/dev/ttyAMA0 _baud:=1000000`
   
 * Launch RViz to visualize current state of the robot
   
-  `roslaunch mycobot_280pi mycobot_follow.launch`
+  `roslaunch mycobot_280pi mycobot_follow_gripper.launch`
 
 
 
