@@ -42,7 +42,7 @@ def findPiece(ar_frame):
       
       #TODO MODIFY THIS OFFSET
       # Process trans to get your state error
-      offset_y = -0.04
+      offset_y = 0
 
 
       input_x = ar_tag_trans.transform.translation.x
