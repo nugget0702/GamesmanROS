@@ -49,6 +49,8 @@ def findPiece(ar_frame):
       input_y = ar_tag_trans.transform.translation.y + offset_y
       input_z = ar_tag_trans.transform.translation.z
 
+      print("Translation of Piece from camera: ", input_x, input_y, input_z)
+
       input_vector = np.array([input_x, input_y, input_z, 1]).T
 
       gripper_trans = tfBuffer.lookup_transform("g_base", "gripper_base", rospy.Time())
