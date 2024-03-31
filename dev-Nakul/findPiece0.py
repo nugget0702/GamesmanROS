@@ -44,10 +44,8 @@ def findPiece(ar_frame):
       # Process trans to get your state error
 
       input_x = ar_tag_trans.transform.translation.x
-      input_y = ar_tag_trans.transform.translation.y
-      input_z = ar_tag_trans.transform.translation.z
-
-      print("Translation of Piece from camera: ", input_x, input_y, input_z)
+      input_y = -ar_tag_trans.transform.translation.y
+      input_z = ar_tag_trans.transform.translation.z + 0.05
 
       input_vector = np.array([input_x, input_y, input_z, 1]).T
 
@@ -73,7 +71,6 @@ def findPiece(ar_frame):
       transform_matrix[2][3] = t_z
       transform_matrix[3][3] = 1
 
-      
       piece_location = (transform_matrix @ input_vector)
       piece = Point()
       piece.x = piece_location[0]
