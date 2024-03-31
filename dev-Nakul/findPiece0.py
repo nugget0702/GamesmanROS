@@ -77,9 +77,9 @@ def findPiece(ar_frame):
       
       piece_location = (transform_matrix @ input_vector)
       piece = Point()
-      piece.x = piece_location[0]
-      piece.y = piece_location[1]
-      piece.z = piece_location[2]
+      piece.x = float(piece_location[0])
+      piece.y = float(piece_location[1])
+      piece.z = float(piece_location[2])
       print(piece_location, type(piece_location[0]))
 
       #################################### end your code ###############
