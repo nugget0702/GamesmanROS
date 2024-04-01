@@ -74,10 +74,9 @@ def findPiece(ar_frame):
 
       piece_location = (transform_matrix @ input_vector)
       piece = Point()
-      piece.x = piece_location[0]
-      piece.y = piece_location[1]
-      piece.z = piece_location[2]
-
+      piece.x = piece_location[0] - 0.542
+      piece.y = piece_location[1] + 1.23
+      piece.z = piece_location[2] + 1.032
       #################################### end your code ###############
       pub.publish(piece)
     except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException) as e:
