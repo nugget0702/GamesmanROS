@@ -12,6 +12,7 @@ import pymycobot
 #TODO Double Check
 mc = pymycobot.MyCobot("/dev/ttyAMA0", baudrate=1000000)
 lift = [109.51, 25.31, -73.47, -19.16, 5.8, 69.34]
+observe = [123.22, -2.19, -27.77, -50.53, 9.84, 86.83]
 
 def pickUp(ar_tag_name):
     rospy.init_node('finding_'+ar_tag_name)
@@ -25,7 +26,7 @@ def pickUp(ar_tag_name):
         return
     
 def findPoint(end_coord):
-    
+
 
 def place(end_coord):
     #TODO findPoint
