@@ -43,11 +43,12 @@ def findPiece(ar_frame):
       #TODO MODIFY THIS OFFSET
       # Process trans to get your state error
 
-      input_x = ar_tag_trans.transform.translation.x
+      input_x = ar_tag_trans.transform.translation.x - 0.04
       input_y = -ar_tag_trans.transform.translation.y
       input_z = ar_tag_trans.transform.translation.z + 0.05
 
       input_vector = np.array([input_x, input_y, input_z, 1]).T
+      print(input_vector)
 
       gripper_trans = tfBuffer.lookup_transform("g_base", "gripper_base", rospy.Time())
       t_x = gripper_trans.transform.translation.x
