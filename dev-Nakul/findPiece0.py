@@ -12,8 +12,9 @@ import tf2_ros
 import sys
 import Quaternions
 import numpy as np
-
-from geometry_msgs.msg import Point
+import tf
+from geometry_msgs.msg import Point, PointStamped
+from std_msgs.msg import Header
 
 #Define the method which contains the main functionality of the node.
 def findPiece(ar_frame):
@@ -50,33 +51,19 @@ def findPiece(ar_frame):
       input_vector = np.array([input_x, input_y, input_z, 1]).T
       print(input_vector)
 
-      gripper_trans = tfBuffer.lookup_transform("g_base", "gripper_base", rospy.Time())
-      t_x = gripper_trans.transform.translation.x
-      t_y = gripper_trans.transform.translation.y
-      t_z = gripper_trans.transform.translation.z
+      input_point = Point()
+      input_point.x = input_x
+      input_point.y = input_y
+      input_point.z = input_z
 
-      q_x = gripper_trans.transform.rotation.x
-      q_y = gripper_trans.transform.rotation.y
-      q_z = gripper_trans.transform.rotation.z
-      q_w = gripper_trans.transform.rotation.w
-      q = [q_w, q_x, q_y, q_z]  
+      tfListener.waitForTransform("/g_base", "/joint6_flange", rospy.Time(), rospy.Duration(10.0))
+		  center_in_base = tfListener.transformPoint("/base", PointStamped(header=Header(stamp=rospy.Time(), frame_id="/joint6_flange"), point=input_point))
 
-      rot_matrix = Quaternions.quaternion_rotation_matrix(q)
-      transform_matrix = np.zeros((4, 4))
-      for i in range(3):
-          for j in range(3):
-            transform_matrix[i][j] = rot_matrix[i][j]
       
-      transform_matrix[0][3] = t_x
-      transform_matrix[1][3] = t_y
-      transform_matrix[2][3] = t_z
-      transform_matrix[3][3] = 1
-
-      piece_location = (transform_matrix @ input_vector)
       piece = Point()
-      piece.x = piece_location[0] - 0.542
-      piece.y = piece_location[1] + 1.23
-      piece.z = piece_location[2] + 1.032
+      piece.x = center_in_base.x
+      piece.y = center_in_base.y
+      piece.z = center_in_base.z
       #################################### end your code ###############
       pub.publish(piece)
     except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException) as e:
