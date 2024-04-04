@@ -43,27 +43,56 @@ def findPiece(ar_frame):
       
       #TODO MODIFY THIS OFFSET
       # Process trans to get your state error
-
       input_x = ar_tag_trans.transform.translation.x
-      input_y = -ar_tag_trans.transform.translation.y
+      input_y = ar_tag_trans.transform.translation.y
       input_z = ar_tag_trans.transform.translation.z
 
-      input_vector = np.array([input_x, input_y, input_z, 1]).T
-      print(input_vector)
+      input_qx = ar_tag_trans.transform.rotation.x
+      input_qy = ar_tag_trans.transform.rotation.y
+      input_qz = ar_tag_trans.transform.rotation.z
+      input_qw = ar_tag_trans.transform.rotation.w
+      input_q = [input_qw, input_qx, input_qy, input_qz]
 
-      input_point = Point()
-      input_point.x = input_x
-      input_point.y = input_y
-      input_point.z = input_z
+      input_rot_matrix = Quaternions.quaternion_rotation_matrix(input_q)
+      input_matrix = np.zeros((4, 4))
+      for i in range(3):
+          for j in range(3):
+            input_matrix[i][j] = input_rot_matrix[i][j]
 
-      tfListener.waitForTransform("/g_base", "/joint6_flange", rospy.Time(), rospy.Duration(10.0))
-      center_in_base = tfListener.transformPoint("/base", PointStamped(header=Header(stamp=rospy.Time(), frame_id="/joint6_flange"), point=input_point))
+      input_matrix[0][3] = input_x
+      input_matrix[1][3] = input_y
+      input_matrix[2][3] = input_z
+      input_matrix[3][3] = 1
+ 
+
+      gripper_trans = tfBuffer.lookup_transform("g_base", "joint6_flange", rospy.Time())
+      t_x = gripper_trans.transform.translation.x
+      t_y = gripper_trans.transform.translation.y
+      t_z = gripper_trans.transform.translation.z
+
+      q_x = gripper_trans.transform.rotation.x
+      q_y = gripper_trans.transform.rotation.y
+      q_z = gripper_trans.transform.rotation.z
+      q_w = gripper_trans.transform.rotation.w
+      q = [q_w, q_x, q_y, q_z]
+
+      rot_matrix = Quaternions.quaternion_rotation_matrix(q)
+      transform_matrix = np.zeros((4, 4))
+      for i in range(3):
+          for j in range(3):
+            transform_matrix[i][j] = rot_matrix[i][j]
+      
+      transform_matrix[0][3] = t_x
+      transform_matrix[1][3] = t_y
+      transform_matrix[2][3] = t_z
+      transform_matrix[3][3] = 1
 
       
+      piece_location = (transform_matrix @ input_matrix)
       piece = Point()
-      piece.x = center_in_base.x
-      piece.y = center_in_base.y
-      piece.z = center_in_base.z
+      piece.x = piece_location[3][0]
+      piece.y = piece_location[3][1]
+      piece.z = piece_location[3][2]
       #################################### end your code ###############
       pub.publish(piece)
     except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException) as e:
