@@ -1,0 +1,8 @@
+prefix=/home/er/Desktop/GamesmanROS/devel
+
+Name: planning_control
+Description: Description of planning_control
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

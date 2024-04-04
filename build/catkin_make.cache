@@ -1,2 +1,2 @@
-ikrobot:mycobot_movit_config:opencv_tools
+dev-jason/planning_control:ikrobot
 -DCATKIN_DEVEL_PREFIX=/home/er/Desktop/GamesmanROS/devel -DCMAKE_INSTALL_PREFIX=/home/er/Desktop/GamesmanROS/install -G Unix Makefiles

@@ -31,6 +31,7 @@ def findPiece(ar_frame):
   pub = rospy.Publisher('/piece_location_' + ar_frame, Point, queue_size=10)
   tfBuffer = tf2_ros.Buffer()
   tfListener = tf2_ros.TransformListener(tfBuffer)
+  listener = tf.TransformListener()
   
   # Create a timer object that will sleep long enough to result in
   # a 10Hz publishing rate
@@ -44,7 +45,7 @@ def findPiece(ar_frame):
       #TODO MODIFY THIS OFFSET
       # Process trans to get your state error
 
-      input_x = ar_tag_trans.transform.translation.x
+      input_x = ar_tag_trans.transform.translation.x - 0.04
       input_y = -ar_tag_trans.transform.translation.y
       input_z = ar_tag_trans.transform.translation.z
 
@@ -56,14 +57,14 @@ def findPiece(ar_frame):
       input_point.y = input_y
       input_point.z = input_z
 
-      tfListener.waitForTransform("/g_base", "/joint6_flange", rospy.Time(), rospy.Duration(10.0))
-      center_in_base = tfListener.transformPoint("/base", PointStamped(header=Header(stamp=rospy.Time(), frame_id="/joint6_flange"), point=input_point))
+      listener.waitForTransform("/g_base", "/joint6_flange", rospy.Time(), rospy.Duration(10.0))
+      center_in_base = listener.transformPoint("/g_base", PointStamped(header=Header(stamp=rospy.Time(), frame_id="/joint6_flange"), point=input_point))
 
       
       piece = Point()
-      piece.x = center_in_base.x
-      piece.y = center_in_base.y
-      piece.z = center_in_base.z
+      piece.x = center_in_base.point.x
+      piece.y = center_in_base.point.y
+      piece.z = center_in_base.point.z
       #################################### end your code ###############
       pub.publish(piece)
     except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException) as e:

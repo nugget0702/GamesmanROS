@@ -1,0 +1,8 @@
+# Request
+float64[] joint_angles # Target joint angles
+
+---
+# Response
+bool success         # Indicates if the path planning was successful
+string message       # Additional information about the planning process
+trajectory_msgs/JointTrajectory trajectory # The planned trajectory
