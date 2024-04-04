@@ -57,7 +57,7 @@ def findPiece(ar_frame):
       input_point.z = input_z
 
       tfListener.waitForTransform("/g_base", "/joint6_flange", rospy.Time(), rospy.Duration(10.0))
-		  center_in_base = tfListener.transformPoint("/base", PointStamped(header=Header(stamp=rospy.Time(), frame_id="/joint6_flange"), point=input_point))
+      center_in_base = tfListener.transformPoint("/base", PointStamped(header=Header(stamp=rospy.Time(), frame_id="/joint6_flange"), point=input_point))
 
       
       piece = Point()
