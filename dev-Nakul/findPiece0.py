@@ -44,13 +44,27 @@ def findPiece(ar_frame):
       # Process trans to get your state error
 
       input_x = ar_tag_trans.transform.translation.x
-      input_y = -ar_tag_trans.transform.translation.y
+      input_y = ar_tag_trans.transform.translation.y
       input_z = ar_tag_trans.transform.translation.z
 
-      input_vector = np.array([input_x, input_y, input_z, 1]).T
-      print(input_vector)
+      input_q_x = ar_tag_trans.transform.rotation.x
+      input_q_y = ar_tag_trans.transform.rotation.y
+      input_q_z = ar_tag_trans.transform.rotation.z
+      input_q_w = ar_tag_trans.transform.rotation.w
+      input_q = [input_q_w, input_q_x, input_q_y, input_q_z]  
 
-      gripper_trans = tfBuffer.lookup_transform("g_base", "gripper_base", rospy.Time())
+      input_rot_matrix = Quaternions.quaternion_rotation_matrix(input_q)
+      input_matrix = np.zeros((4, 4))
+      for a in range(3):
+          for b in range(3):
+            input_matrix[a][b] = input_rot_matrix[a][b]
+      
+      input_matrix[0][3] = input_x
+      input_matrix[1][3] = input_y
+      input_matrix[2][3] = input_z
+      input_matrix[3][3] = 1
+
+      gripper_trans = tfBuffer.lookup_transform("g_base", "joint6_flange", rospy.Time())
       t_x = gripper_trans.transform.translation.x
       t_y = gripper_trans.transform.translation.y
       t_z = gripper_trans.transform.translation.z
@@ -72,11 +86,11 @@ def findPiece(ar_frame):
       transform_matrix[2][3] = t_z
       transform_matrix[3][3] = 1
 
-      piece_location = (transform_matrix @ input_vector)
+      piece_location = (transform_matrix @ input_matrix)
       piece = Point()
-      piece.x = piece_location[0] - 0.542
-      piece.y = piece_location[1] + 1.23
-      piece.z = piece_location[2] + 1.032
+      piece.x = piece_location[3][0]
+      piece.y = piece_location[3][1]
+      piece.z = piece_location[3][2]
       #################################### end your code ###############
       pub.publish(piece)
     except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException) as e:
