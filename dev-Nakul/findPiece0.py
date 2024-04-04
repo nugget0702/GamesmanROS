@@ -12,9 +12,8 @@ import tf2_ros
 import sys
 import Quaternions
 import numpy as np
-import tf
-from geometry_msgs.msg import Point, PointStamped
-from std_msgs.msg import Header
+
+from geometry_msgs.msg import Point
 
 #Define the method which contains the main functionality of the node.
 def findPiece(ar_frame):
@@ -31,7 +30,6 @@ def findPiece(ar_frame):
   pub = rospy.Publisher('/piece_location_' + ar_frame, Point, queue_size=10)
   tfBuffer = tf2_ros.Buffer()
   tfListener = tf2_ros.TransformListener(tfBuffer)
-  listener = tf.TransformListener()
   
   # Create a timer object that will sleep long enough to result in
   # a 10Hz publishing rate
@@ -45,26 +43,40 @@ def findPiece(ar_frame):
       #TODO MODIFY THIS OFFSET
       # Process trans to get your state error
 
-      input_x = ar_tag_trans.transform.translation.x - 0.04
+      input_x = ar_tag_trans.transform.translation.x
       input_y = -ar_tag_trans.transform.translation.y
       input_z = ar_tag_trans.transform.translation.z
 
       input_vector = np.array([input_x, input_y, input_z, 1]).T
       print(input_vector)
 
-      input_point = Point()
-      input_point.x = input_x
-      input_point.y = input_y
-      input_point.z = input_z
+      gripper_trans = tfBuffer.lookup_transform("g_base", "gripper_base", rospy.Time())
+      t_x = gripper_trans.transform.translation.x
+      t_y = gripper_trans.transform.translation.y
+      t_z = gripper_trans.transform.translation.z
 
-      listener.waitForTransform("/g_base", "/joint6_flange", rospy.Time(), rospy.Duration(10.0))
-      center_in_base = listener.transformPoint("/g_base", PointStamped(header=Header(stamp=rospy.Time(), frame_id="/joint6_flange"), point=input_point))
+      q_x = gripper_trans.transform.rotation.x
+      q_y = gripper_trans.transform.rotation.y
+      q_z = gripper_trans.transform.rotation.z
+      q_w = gripper_trans.transform.rotation.w
+      q = [q_w, q_x, q_y, q_z]  
 
+      rot_matrix = Quaternions.quaternion_rotation_matrix(q)
+      transform_matrix = np.zeros((4, 4))
+      for i in range(3):
+          for j in range(3):
+            transform_matrix[i][j] = rot_matrix[i][j]
       
+      transform_matrix[0][3] = t_x
+      transform_matrix[1][3] = t_y
+      transform_matrix[2][3] = t_z
+      transform_matrix[3][3] = 1
+
+      piece_location = (transform_matrix @ input_vector)
       piece = Point()
-      piece.x = center_in_base.point.x
-      piece.y = center_in_base.point.y
-      piece.z = center_in_base.point.z
+      piece.x = piece_location[0] - 0.542
+      piece.y = piece_location[1] + 1.23
+      piece.z = piece_location[2] + 1.032
       #################################### end your code ###############
       pub.publish(piece)
     except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException) as e:
