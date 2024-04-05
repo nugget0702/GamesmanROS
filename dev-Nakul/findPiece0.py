@@ -46,6 +46,7 @@ def findPiece(ar_frame):
       input_x = ar_tag_trans.transform.translation.x
       input_y = ar_tag_trans.transform.translation.y
       input_z = ar_tag_trans.transform.translation.z
+      input_vector = np.array([input_x, input_y, input_z, 1])
 
       input_q_x = ar_tag_trans.transform.rotation.x
       input_q_y = ar_tag_trans.transform.rotation.y
@@ -59,9 +60,9 @@ def findPiece(ar_frame):
           for b in range(3):
             input_matrix[a][b] = input_rot_matrix[a][b]
       
-      input_matrix[0][3] = input_x
-      input_matrix[1][3] = input_y
-      input_matrix[2][3] = input_z
+      input_matrix[0][3] = 0
+      input_matrix[1][3] = 0
+      input_matrix[2][3] = 0
       input_matrix[3][3] = 1
 
       gripper_trans = tfBuffer.lookup_transform("g_base", "joint6_flange", rospy.Time())
@@ -86,7 +87,7 @@ def findPiece(ar_frame):
       transform_matrix[2][3] = t_z
       transform_matrix[3][3] = 1
 
-      piece_location = (transform_matrix @ input_matrix)
+      piece_location = ((transform_matrix @ input_matrix) @ input_vector)
       piece = Point()
       piece.x = piece_location[3][0]
       piece.y = piece_location[3][1]
