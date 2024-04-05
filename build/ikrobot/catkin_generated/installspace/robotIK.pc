@@ -1,0 +1,8 @@
+prefix=/home/er/Desktop/GamesmanROS/install
+
+Name: robotIK
+Description: Description of robotIK
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
