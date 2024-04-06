@@ -65,7 +65,7 @@ def findPiece(ar_frame):
       input_matrix[2][3] = 0
       input_matrix[3][3] = 1
 
-      gripper_trans = tfBuffer.lookup_transform("g_base", "joint6_flange", rospy.Time())
+      gripper_trans = tfBuffer.lookup_transform("joint1", "joint6_flange", rospy.Time())
       t_x = gripper_trans.transform.translation.x
       t_y = gripper_trans.transform.translation.y
       t_z = gripper_trans.transform.translation.z
