@@ -43,14 +43,14 @@ def findPiece(ar_frame):
       #TODO MODIFY THIS OFFSET
       # Process trans to get your state error
 
-      input_x = -ar_tag_trans.transform.translation.x
+      input_x = ar_tag_trans.transform.translation.x
       input_y = ar_tag_trans.transform.translation.y 
       input_z = ar_tag_trans.transform.translation.z
       input_vector = np.array([input_x, input_y, input_z, 1])
 
       piece = Point()
-      piece.x = -input_y
-      piece.y = -input_x
+      piece.x = input_y
+      piece.y = input_x
       piece.z = input_z
       #################################### end your code ###############
       pub.publish(piece)
