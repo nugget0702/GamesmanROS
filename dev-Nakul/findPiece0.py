@@ -87,9 +87,7 @@ def findPiece(ar_frame):
       transform_matrix[2][3] = t_z
       transform_matrix[3][3] = 1
 
-      print(input_matrix)
-      print(input_vector)
-      piece_location = ((transform_matrix @ input_matrix) @ input_vector)
+      piece_location = (transform_matrix @ input_vector)
       piece = Point()
       piece.x = piece_location[0]
       piece.y = piece_location[1]
