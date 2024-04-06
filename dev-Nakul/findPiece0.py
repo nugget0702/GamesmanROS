@@ -48,23 +48,6 @@ def findPiece(ar_frame):
       input_z = ar_tag_trans.transform.translation.z
       input_vector = np.array([input_x, input_y, input_z, 1])
 
-      input_q_x = ar_tag_trans.transform.rotation.x
-      input_q_y = ar_tag_trans.transform.rotation.y
-      input_q_z = ar_tag_trans.transform.rotation.z
-      input_q_w = ar_tag_trans.transform.rotation.w
-      input_q = [input_q_w, input_q_x, input_q_y, input_q_z]  
-
-      input_rot_matrix = Quaternions.quaternion_rotation_matrix(input_q)
-      input_matrix = np.zeros((4, 4))
-      for a in range(3):
-          for b in range(3):
-            input_matrix[a][b] = input_rot_matrix[a][b]
-      
-      input_matrix[0][3] = 0
-      input_matrix[1][3] = 0
-      input_matrix[2][3] = 0
-      input_matrix[3][3] = 1
-
       gripper_trans = tfBuffer.lookup_transform("joint1", "joint6_flange", rospy.Time())
       t_x = gripper_trans.transform.translation.x
       t_y = gripper_trans.transform.translation.y
