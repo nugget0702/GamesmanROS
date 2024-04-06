@@ -38,7 +38,7 @@ def findPiece(ar_frame):
   # Loop until the node is killed with Ctrl-C
   while not rospy.is_shutdown():
     try:
-      ar_tag_trans = tfBuffer.lookup_transform(ar_frame, "usb_cam", rospy.Time())
+      ar_tag_trans = tfBuffer.lookup_transform("usb_cam", ar_frame, rospy.Time())
       
       #TODO MODIFY THIS OFFSET
       # Process trans to get your state error
@@ -46,11 +46,11 @@ def findPiece(ar_frame):
       input_x = ar_tag_trans.transform.translation.x
       input_y = ar_tag_trans.transform.translation.y
       input_z = ar_tag_trans.transform.translation.z
-      input_vector = np.array([-input_x, input_y, -input_z, 1])
+      input_vector = np.array([input_x, input_y, input_z, 1])
 
-      input_q_x = ar_tag_trans.transform.rotation.x
+      input_q_x = -ar_tag_trans.transform.rotation.x
       input_q_y = ar_tag_trans.transform.rotation.y
-      input_q_z = ar_tag_trans.transform.rotation.z
+      input_q_z = -ar_tag_trans.transform.rotation.z
       input_q_w = ar_tag_trans.transform.rotation.w
       input_q = [input_q_w, input_q_x, input_q_y, input_q_z]  
 
