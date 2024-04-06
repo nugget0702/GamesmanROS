@@ -9,7 +9,7 @@ if __name__ == '__main__':
     while not rospy.is_shutdown():
         t = rospy.Time.now().to_sec() * math.pi
         br.sendTransform((0.0, -0.04, 0.0),
-                        (-0.70710678,  0, -0, 0.70710678),
+                        (0.70710678, -0.70710678, 0, -0),
                         rospy.Time.now(),
                         "usb_cam",
                         "joint6_flange")
