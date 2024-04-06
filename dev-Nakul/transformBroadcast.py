@@ -8,8 +8,8 @@ if __name__ == '__main__':
     rate = rospy.Rate(10.0)
     while not rospy.is_shutdown():
         t = rospy.Time.now().to_sec() * math.pi
-        br.sendTransform((0.0, 0.04, 0.0),
-                        (0, 0, 0.7071,  0.7071),
+        br.sendTransform((0.0, -0.04, 0.0),
+                        (0, 0, 0,  1),
                         rospy.Time.now(),
                         "usb_cam",
                         "joint6_flange")
