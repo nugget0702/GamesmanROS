@@ -38,44 +38,20 @@ def findPiece(ar_frame):
   # Loop until the node is killed with Ctrl-C
   while not rospy.is_shutdown():
     try:
-      ar_tag_trans = tfBuffer.lookup_transform("usb_cam", ar_frame, rospy.Time())
+      ar_tag_trans = tfBuffer.lookup_transform("joint1", ar_frame, rospy.Time())
       
       #TODO MODIFY THIS OFFSET
       # Process trans to get your state error
 
-      input_x = ar_tag_trans.transform.translation.x + 0.04
-      input_y = -ar_tag_trans.transform.translation.y 
+      input_x = ar_tag_trans.transform.translation.x
+      input_y = ar_tag_trans.transform.translation.y 
       input_z = ar_tag_trans.transform.translation.z
       input_vector = np.array([input_x, input_y, input_z, 1])
 
-      gripper_trans = tfBuffer.lookup_transform("joint1", "joint6_flange", rospy.Time())
-      t_x = gripper_trans.transform.translation.x
-      t_y = gripper_trans.transform.translation.y
-      t_z = gripper_trans.transform.translation.z
-
-      q_x = gripper_trans.transform.rotation.x
-      q_y = gripper_trans.transform.rotation.y
-      q_z = gripper_trans.transform.rotation.z
-      q_w = gripper_trans.transform.rotation.w
-      q = [q_w, q_x, q_y, q_z]  
-
-      rot_matrix = Quaternions.quaternion_rotation_matrix(q)
-      transform_matrix = np.zeros((4, 4))
-      for i in range(3):
-          for j in range(3):
-            transform_matrix[i][j] = rot_matrix[i][j]
-      
-      transform_matrix[0][3] = t_x
-      transform_matrix[1][3] = t_y
-      transform_matrix[2][3] = t_z
-      transform_matrix[3][3] = 1
-
-      print(input_vector)
-      piece_location = (transform_matrix @ input_vector)
       piece = Point()
-      piece.x = piece_location[0]
-      piece.y = piece_location[1]
-      piece.z = piece_location[2]
+      piece.x = input_x
+      piece.y = input_y
+      piece.z = input_z
       #################################### end your code ###############
       pub.publish(piece)
     except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException) as e:
