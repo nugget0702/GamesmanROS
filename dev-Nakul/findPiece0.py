@@ -49,7 +49,7 @@ def findPiece(ar_frame):
       input_vector = np.array([input_x, input_y, input_z, 1])
 
       piece = Point()
-      piece.x = input_x
+      piece.x = input_x - 0.04
       piece.y = input_y
       piece.z = input_z
       #################################### end your code ###############
