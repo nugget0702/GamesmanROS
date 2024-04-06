@@ -46,7 +46,7 @@ def findPiece(ar_frame):
       input_x = ar_tag_trans.transform.translation.x
       input_y = ar_tag_trans.transform.translation.y
       input_z = ar_tag_trans.transform.translation.z
-      input_vector = np.array([input_x, input_y, input_z, 1])
+      input_vector = np.array([input_x, abs(input_y), abs(input_z), 1])
 
       input_q_x = ar_tag_trans.transform.rotation.x
       input_q_y = ar_tag_trans.transform.rotation.y
@@ -87,7 +87,7 @@ def findPiece(ar_frame):
       transform_matrix[2][3] = t_z
       transform_matrix[3][3] = 1
 
-      piece_location = ((transform_matrix @ input_matrix) @ input_vector)
+      piece_location = (transform_matrix @ input_vector)
       piece = Point()
       piece.x = piece_location[0]
       piece.y = piece_location[1]
