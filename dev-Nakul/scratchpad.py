@@ -1,16 +1,15 @@
 import numpy as np
 from scipy.spatial.transform import Rotation as R
 
-# Quaternion for -90 degree rotation around X-axis
-qx = R.from_euler('x', -90, degrees=True)
+# Quaternion for 90 degrees rotation around Z-axis
+q_z = R.from_quat([0, 0, np.sqrt(2)/2, np.sqrt(2)/2])
 
-# Quaternion for -90 degree rotation around Y-axis
-qy = R.from_euler('y', -90, degrees=True)
+# Quaternion for 180 degrees rotation around Y-axis (to simulate flipping X after rotation)
+q_y_flip = R.from_quat([0, 1, 0, 0])
 
-# Combined rotation: first around X, then around Y
-q_combined = qy * qx
+# Combine the rotations
+combined_q = q_y_flip * q_z
 
-# Convert to quaternion (x, y, z, w) format
-combined_quat = q_combined.as_quat()
-
-print("Combined rotation quaternion:", combined_quat)
+# Output the combined quaternion
+combined_quaternion = combined_q.as_quat()
+print("Combined Quaternion:", combined_quaternion)
