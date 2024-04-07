@@ -98,10 +98,10 @@ pieces = {str(c) : "" for c in centers}
 
 #Initialize Board Pieces
 #TODO
-pieces["0.5, 1.5"] = "ar_marker_0"
-pieces["0.5, 2.5"] = "ar_marker_3"
-pieces["1.5, 3.5"] = "ar_marker_1"
-pieces["2.5, 3.5"] = "ar_marker_6"
+pieces["[0.5, 1.5]"] = "ar_marker_0"
+pieces["[0.5, 2.5]"] = "ar_marker_3"
+pieces["[1.5, 3.5]"] = "ar_marker_1"
+pieces["[2.5, 3.5]"] = "ar_marker_6"
 
 move = moveRobot.Acutate() 
 
