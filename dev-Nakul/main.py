@@ -116,7 +116,7 @@ while (len(moves_data) > 0):
         pieces[end_coord] = ar_tag_piece
         pieces[start_coord] = ""
 
-        print("A : ", move_coords, ar_tag_piece)
+        print("A : ", start_coord, end_coord, ar_tag_piece)
         flag = False
         while not flag:
             user = input("Enter y and Press ENTER: ")
