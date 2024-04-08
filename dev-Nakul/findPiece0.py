@@ -57,7 +57,7 @@ def findPiece(ar_frame):
       piece = Point()
       piece.x = input_x
       piece.y = input_y
-      piece.z = -input_z
+      piece.z = input_z
 
 
       tf_listener.waitForTransform("joint1", "usb_cam", rospy.Time(), rospy.Duration(10.0))
