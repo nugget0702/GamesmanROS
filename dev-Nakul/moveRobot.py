@@ -14,7 +14,7 @@ class Acutate:
     def __init__(self):
         self.mc = pymycobot.MyCobot("/dev/ttyAMA0", baudrate=1000000)
         self.lift = [109.51, 25.31, -73.47, -19.16, 5.8, 69.34]
-        self.observe = [128.67, 4.92, 61.96, -28.56, 14.06, 89.03]
+        self.observe = [126.65, 9.31, -80.85, -13.97, 11.95, 88.76]
         self.sub = None
 
     def pickUp(self, ar_tag_name):
@@ -44,12 +44,12 @@ class Acutate:
             
             # Construct the request
             request = GetPositionIKRequest()
-            request.ik_request.group_name = "right_arm"
+            request.ik_request.group_name = "arm_group"
 
             # If a Sawyer does not have a gripper, replace '_gripper_tip' with '_wrist' instead
-            link = "right_gripper_tip"
+            #link = "right_gripper_tip"
 
-            request.ik_request.ik_link_name = link
+            #request.ik_request.ik_link_name = link
             #request.ik_request.attempts = 20
             request.ik_request.pose_stamped.header.frame_id = "joint1"
             
@@ -70,7 +70,7 @@ class Acutate:
                 print(response)
 
                 #DEBUG & TODO
-                group = MoveGroupCommander("right_arm")
+                group = MoveGroupCommander("arm_group")
 
                 # Setting position and orientation target
                 group.set_pose_target(request.ik_request.pose_stamped)

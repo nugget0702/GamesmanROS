@@ -12,8 +12,10 @@ import tf2_ros
 import sys
 import Quaternions
 import numpy as np
+import tf
 
-from geometry_msgs.msg import Point
+from geometry_msgs.msg import Point, PointStamped
+from std_msgs.msg import Header
 
 #Define the method which contains the main functionality of the node.
 def findPiece(ar_frame):
@@ -30,7 +32,11 @@ def findPiece(ar_frame):
   pub = rospy.Publisher('/piece_location_' + ar_frame, Point, queue_size=10)
   tfBuffer = tf2_ros.Buffer()
   tfListener = tf2_ros.TransformListener(tfBuffer)
-  
+
+
+  tf_listener = tf.TransformListener()
+  tfbr = tf.TransformBroadcaster()
+
   # Create a timer object that will sleep long enough to result in
   # a 10Hz publishing rate
   r = rospy.Rate(10) # 10hz
@@ -38,7 +44,8 @@ def findPiece(ar_frame):
   # Loop until the node is killed with Ctrl-C
   while not rospy.is_shutdown():
     try:
-      ar_tag_trans = tfBuffer.lookup_transform("joint1", ar_frame, rospy.Time())
+      ar_tag_trans = tfBuffer.lookup_transform("usb_cam", ar_frame, rospy.Time())
+
       
       #TODO MODIFY THIS OFFSET
       # Process trans to get your state error
@@ -46,12 +53,20 @@ def findPiece(ar_frame):
       input_x = ar_tag_trans.transform.translation.x
       input_y = ar_tag_trans.transform.translation.y 
       input_z = ar_tag_trans.transform.translation.z
-      input_vector = np.array([input_x, input_y, input_z, 1])
 
       piece = Point()
-      piece.x = input_x - 0.04
+      piece.x = input_x
       piece.y = input_y
-      piece.z = input_z
+      piece.z = -input_z
+
+
+      tf_listener.waitForTransform("joint1", "usb_cam", rospy.Time(), rospy.Duration(10.0))
+      center_in_base = tf_listener.transformPoint("joint1", PointStamped(header=Header(stamp=rospy.Time(), frame_id="usb_cam"), point=piece))
+
+      piece.x = center_in_base.point.x
+      piece.y = center_in_base.point.y
+      piece.z = center_in_base.point.z
+
       #################################### end your code ###############
       pub.publish(piece)
     except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException) as e:
