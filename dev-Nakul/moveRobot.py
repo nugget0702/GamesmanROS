@@ -96,7 +96,7 @@ class Acutate:
                         rospy.sleep(1.0)
                         print('Done!')
 
-                        
+                        print(plan)
                         group.execute(plan[1])
 
                         # Close the right gripper
@@ -104,7 +104,7 @@ class Acutate:
                         self.mc.set_gripper_state(1, 20)
                         rospy.sleep(1.0)
 
-                        self.mc.send_angles(self.lift)
+                        self.mc.send_angles(self.lift, 20)
                     else:
                         print("Inside Place")
 
