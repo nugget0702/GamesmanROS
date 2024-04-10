@@ -53,7 +53,7 @@ class Acutate:
 
             #request.ik_request.ik_link_name = link
             #request.ik_request.attempts = 20
-            request.ik_request.pose_stamped.header.frame_id = "joint1"
+            request.ik_request.pose_stamped.header.frame_id = "g_base"
             
             # Set the desired orientation for the end effector HERE
             request.ik_request.pose_stamped.pose.position.x = point.x
