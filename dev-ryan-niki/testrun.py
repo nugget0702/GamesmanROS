@@ -52,9 +52,10 @@ def position_to_coord(start, end):
         for i in range(len(start)):
             if start[i] != end[i]:
                 if start[i] != "-" and end[i] != "-":
-                    moves.append([centers[i], [-1, captureplace]])
-                    captureplace -= 1
-                if start[i] == "-":
+                    moves.append([centers[i], [-1, -1]])
+                    end_cord = centers[i]
+                    # captureplace -= 1
+                elif start[i] == "-":
                     end_cord = centers[i]
                 else:
                     start_cord = centers[i]
