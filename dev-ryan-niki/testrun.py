@@ -34,8 +34,6 @@ starting_position = static_data["startPosition"]
 # Input: starting position string and ending position string
 # Output: List of start coord and end cood [[x1, y1], [x2, y2]]
 
-captureplace = -1
-
 
 def position_to_coord(start, end):
     moves = []
@@ -116,7 +114,10 @@ while (len(moves_data) > 0):
         while not flag:
             user = input("Enter y and Press ENTER: ")
             flag = user == 'y'
-        # moveRobotPi.play(move_coords[0], move_coords[1])
+
+        for move in move_coords:
+            # moveRobotPi.play(move[0], move[1])
+            pass
 
         Dynamic_URL = Static_URL + new_position
         moves_data = requests.get(url=Dynamic_URL).json()['moves']
@@ -132,7 +133,10 @@ while (len(moves_data) > 0):
         while not flag:
             user = input("Enter y and Press ENTER: ")
             flag = user == 'y'
-        # moveRobotPi.play(move_coords[0], move_coords[1])
+
+        for move in move_coords:
+            # moveRobotPi.play(move[0], move[1])
+            pass
 
         Dynamic_URL = Static_URL + new_position
         moves_data = requests.get(url=Dynamic_URL).json()['moves']
