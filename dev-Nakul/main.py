@@ -1,5 +1,4 @@
 import requests
-import moveRobotPi
 import moveRobot
 
 URL = "https://nyc.cs.berkeley.edu/universal/v1/"
@@ -99,32 +98,32 @@ pieces = {str(c) : "" for c in centers}
 
 #Initialize Board Pieces
 #TODO
-pieces["1.5, 2.5"] = "ar_tracker_0"
-pieces["..."] = "..."
-pieces["..."] = "..."
-pieces["..."] = "..."
+pieces["[0.5, 1.5]"] = "ar_marker_0"
+pieces["[0.5, 2.5]"] = "ar_marker_3"
+pieces["[1.5, 3.5]"] = "ar_marker_1"
+pieces["[2.5, 3.5]"] = "ar_marker_6"
 
+move = moveRobot.Acutate() 
 
 A_turn = True
 while (len(moves_data) > 0):
     if A_turn:
         new_position = pick_best_position(moves_data)
         move_coords = position_to_coord(starting_position, new_position)
-        start_coord, end_coord = (move_coords[0], move_coords[1])
+        start_coord, end_coord = (str(move_coords[0]), str(move_coords[1]))
 
         ar_tag_piece = pieces[start_coord]
         pieces[end_coord] = ar_tag_piece
         pieces[start_coord] = ""
 
-        print("A : ", move_coords, ar_tag_piece)
+        print("A : ", start_coord, end_coord, ar_tag_piece)
         flag = False
         while not flag:
             user = input("Enter y and Press ENTER: ")
             flag = user == 'y'
         
-        moveRobot.pickUp(ar_tag_piece)
-        moveRobot.place(end_coord)
-
+        move.pickUp(ar_tag_piece)
+        #moveRobot.place(end_coord)
 
         Dynamic_URL = Static_URL + new_position
         moves_data = requests.get(url=Dynamic_URL).json()['moves']
@@ -134,6 +133,7 @@ while (len(moves_data) > 0):
         new_position = pick_best_position(moves_data)
         print(starting_position, new_position)
         move_coords = position_to_coord(starting_position, new_position)
+        start_coord, end_coord = (str(move_coords[0]), str(move_coords[1]))
 
         ar_tag_piece = pieces[start_coord]
         pieces[end_coord] = ar_tag_piece
@@ -145,8 +145,8 @@ while (len(moves_data) > 0):
             user = input("Enter y and Press ENTER: ")
             flag = user == 'y'
         
-        moveRobot.pickUp(ar_tag_piece)
-        moveRobot.place(end_coord)
+        move.pickUp(ar_tag_piece)
+        #moveRobot.place(end_coord)
         
         Dynamic_URL = Static_URL + new_position
         moves_data = requests.get(url=Dynamic_URL).json()['moves']
