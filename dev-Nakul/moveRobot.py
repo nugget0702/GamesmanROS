@@ -35,10 +35,12 @@ class Acutate:
 
     def move(self, point, pickUp=True):
         # Wait for the IK service to become available
+        print("Inside move")
         rospy.wait_for_service('compute_ik')
         rospy.init_node('service_query')
         # Create the function used to call the service
         compute_ik = rospy.ServiceProxy('compute_ik', GetPositionIK)
+
         while not rospy.is_shutdown():
             input('Inside Move function, Press [ Enter ]: ')
             
@@ -86,6 +88,8 @@ class Acutate:
                 # Execute IK if safe
                 if user_input == 'y':                    
                     if pickUp:
+                        print("Inside Pickup")
+
                         # Open the right gripper
                         print('Opening...')
                         self.mc.set_gripper_state(0, 20)
@@ -100,8 +104,10 @@ class Acutate:
                         self.mc.set_gripper_state(1, 20)
                         rospy.sleep(1.0)
 
-                        self.mc.send_angles(self.lift)
+                        self.mc.send_angles(self.lift, 20)
                     else:
+                        print("Inside Place")
+
                         group.execute(plan[1])
 
                         # Open the right gripper
