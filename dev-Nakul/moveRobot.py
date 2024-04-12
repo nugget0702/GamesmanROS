@@ -90,7 +90,7 @@ class Acutate:
                         rospy.sleep(1.0)
                         print('Done!')
 
-                        
+                        print(plan)
                         group.execute(plan[1])
                         rospy.sleep(3.0)
                         # Close the right gripper
