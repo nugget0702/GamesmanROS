@@ -69,7 +69,7 @@ def findPiece(ar_frame):
                         "aligned_usb_cam",
                         "joint1")
       tfbr.sendTransform((input_x, -input_y+0.05, 0),
-                        tf.transformations.quaternion_from_euler(0, 0, 0),
+                        (0, 0, 0, 1),
                         rospy.Time.now(),
                         "marker0 " + ar_frame,
                         "usb_cam")
