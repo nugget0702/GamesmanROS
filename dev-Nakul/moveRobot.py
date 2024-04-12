@@ -36,8 +36,10 @@ class Acutate:
 
     def pickUp(self, ar_tag_name):
         try:
+            print("Inside pickUP : ", ar_tag_name)
             self.mc.send_angles(self.observe, 20)
             rospy.sleep(2.0)
+
             self.sub = rospy.Subscriber('/piece_location_' + ar_tag_name, Point, self.move, queue_size=10)
         except:
             print("Could not locate piece : " + ar_tag_name)
@@ -49,6 +51,7 @@ class Acutate:
         self.move(point, pickUp=False)
 
     def move(self, pose, pickUp=True):
+        print("Inside Move: ", pose)
         while not rospy.is_shutdown():
             input('Inside Move function, Press [ Enter ]: ')
             # Set the desired orientation for the end effector HERE
