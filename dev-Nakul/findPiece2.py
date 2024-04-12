@@ -12,8 +12,10 @@ import tf2_ros
 import sys
 import Quaternions
 import numpy as np
+import tf
 
-from geometry_msgs.msg import Point
+from geometry_msgs.msg import Point, PointStamped, Quaternion, QuaternionStamped, Pose
+from std_msgs.msg import Header
 
 #Define the method which contains the main functionality of the node.
 def findPiece(ar_frame):
@@ -27,10 +29,14 @@ def findPiece(ar_frame):
   ################################### YOUR CODE HERE ##############
 
   #Create a publisher and a tf buffer, which is primed with a tf listener
-  pub = rospy.Publisher('/piece_location_' + ar_frame, Point, queue_size=10)
+  pub = rospy.Publisher('/piece_location_' + ar_frame, Pose, queue_size=10)
   tfBuffer = tf2_ros.Buffer()
   tfListener = tf2_ros.TransformListener(tfBuffer)
-  
+
+
+  tf_listener = tf.TransformListener()
+  tfbr = tf.TransformBroadcaster()
+
   # Create a timer object that will sleep long enough to result in
   # a 10Hz publishing rate
   r = rospy.Rate(10) # 10hz
@@ -38,22 +44,73 @@ def findPiece(ar_frame):
   # Loop until the node is killed with Ctrl-C
   while not rospy.is_shutdown():
     try:
-      ar_tag_trans = tfBuffer.lookup_transform("joint1", ar_frame, rospy.Time())
+      cam_to_base_trans = tfBuffer.lookup_transform("joint1", "usb_cam", rospy.Time())
+      ar_tag_trans = tfBuffer.lookup_transform("usb_cam", ar_frame, rospy.Time())
+
+      #TODO MODIFY THIS OFFSET
+      # Process trans to get your state error
+      cam_trans_x = cam_to_base_trans.transform.translation.x
+      cam_trans_y = cam_to_base_trans.transform.translation.y
+      cam_trans_z = cam_to_base_trans.transform.translation.z
+
+      cam_rot_x = cam_to_base_trans.transform.rotation.x
+      cam_rot_y = cam_to_base_trans.transform.rotation.y
+      cam_rot_z = cam_to_base_trans.transform.rotation.z
+      cam_rot_w = cam_to_base_trans.transform.rotation.w
+
+      input_x = ar_tag_trans.transform.translation.x
+      input_y = ar_tag_trans.transform.translation.y 
+      input_z = ar_tag_trans.transform.translation.z
+
+      tfbr.sendTransform((cam_trans_x, cam_trans_y, cam_trans_z),
+                        (0, 0, 0, 1),
+                        rospy.Time.now(),
+                        "aligned_usb_cam",
+                        "joint1")
+      tfbr.sendTransform((input_x, -input_y+0.05, 0),
+                        (0, 0, 0, 1),
+                        rospy.Time.now(),
+                        "marker2 " + ar_frame,
+                        "aligned_usb_cam")
       
+      ar_tag_trans = tfBuffer.lookup_transform("aligned_usb_cam", "marker2 " + ar_frame, rospy.Time())
+
       #TODO MODIFY THIS OFFSET
       # Process trans to get your state error
 
       input_x = ar_tag_trans.transform.translation.x
       input_y = ar_tag_trans.transform.translation.y 
       input_z = ar_tag_trans.transform.translation.z
-      input_vector = np.array([input_x, input_y, input_z, 1])
+
 
       piece = Point()
-      piece.x = input_x - 0.04
+      piece.x = input_x
       piece.y = input_y
       piece.z = input_z
+
+      orientation = Quaternion()
+      orientation.x = ar_tag_trans.transform.rotation.x
+      orientation.y = ar_tag_trans.transform.rotation.y
+      orientation.z = ar_tag_trans.transform.rotation.z
+      orientation.w = ar_tag_trans.transform.rotation.w
+
+
+      tf_listener.waitForTransform("joint1", "aligned_usb_cam", rospy.Time(), rospy.Duration(10.0))
+      center_in_base = tf_listener.transformPoint("joint1", PointStamped(header=Header(stamp=rospy.Time(), frame_id="aligned_usb_cam"), point=piece))
+      orientation_in_base = tf_listener.transformQuaternion("joint1", QuaternionStamped(header=Header(stamp=rospy.Time(), frame_id="aligned_usb_cam"), quaternion=orientation))
+
+      piece_pose = Pose()
+      piece_pose.position.x = center_in_base.point.x
+      piece_pose.position.y = center_in_base.point.y
+      piece_pose.position.z = center_in_base.point.z
+      piece_pose.orientation.x = orientation_in_base.quaternion.x
+      piece_pose.orientation.y = orientation_in_base.quaternion.y
+      piece_pose.orientation.z = orientation_in_base.quaternion.z
+      piece_pose.orientation.w = orientation_in_base.quaternion.w
+
+
       #################################### end your code ###############
-      pub.publish(piece)
+      pub.publish(piece_pose)
     except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException) as e:
       print("error: ", e)
       pass

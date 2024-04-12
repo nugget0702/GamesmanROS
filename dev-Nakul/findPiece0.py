@@ -62,7 +62,6 @@ def findPiece(ar_frame):
       input_y = ar_tag_trans.transform.translation.y 
       input_z = ar_tag_trans.transform.translation.z
 
-      print(input_y)
       tfbr.sendTransform((cam_trans_x, cam_trans_y, cam_trans_z),
                         (0, 0, 0, 1),
                         rospy.Time.now(),
@@ -98,7 +97,7 @@ def findPiece(ar_frame):
 
       tf_listener.waitForTransform("joint1", "aligned_usb_cam", rospy.Time(), rospy.Duration(10.0))
       center_in_base = tf_listener.transformPoint("joint1", PointStamped(header=Header(stamp=rospy.Time(), frame_id="aligned_usb_cam"), point=piece))
-      orientation_in_base = tf_listener.transformQuaternion("joint1", QuaternionStamped(header=Header(stamp=rospy.Time(), frame_id="aligned_usb_cam"), quaternion=orientation))
+      orientation_in_base = tf_listener.transformQuaternion("joint1", QuaternionStamped(header=Header(stamp=rospy.Time(), frame_id="usb_cam"), quaternion=orientation))
 
       piece_pose = Pose()
       piece_pose.position.x = center_in_base.point.x

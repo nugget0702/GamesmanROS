@@ -14,7 +14,7 @@ class Acutate:
     def __init__(self):
         self.mc = pymycobot.MyCobot("/dev/ttyAMA0", baudrate=1000000)
         self.lift = [109.51, 25.31, -73.47, -19.16, 5.8, 69.34]
-        self.observe = [126.65, 9.31, -80.85, -13.97, 11.95, 88.76]
+        self.observe = [131.13, 5.53, -50.53, -37.08, 13.27, 91.93]
         self.sub = None
 
         # Wait for the IK service to become available
@@ -37,7 +37,6 @@ class Acutate:
     def pickUp(self, ar_tag_name):
         rospy.init_node('finding_'+ar_tag_name)
         try:
-            # Subscribe to the topic "/chatter" with a queue size of 10
             self.mc.send_angles(self.observe, 20)
             rospy.sleep(2.0)
             self.sub = rospy.Subscriber('/piece_location_' + ar_tag_name, Point, self.move, queue_size=10)
