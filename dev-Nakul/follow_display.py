@@ -43,6 +43,7 @@ def talker():
         joint_state_send.header.stamp = rospy.Time.now()
 
         angles = mycobot.get_radians()
+
         data_list = []
         for index, value in enumerate(angles):
             data_list.append(value)

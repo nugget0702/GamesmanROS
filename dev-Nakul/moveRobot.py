@@ -13,6 +13,7 @@ class Acutate:
     #TODO Double Check
     def __init__(self):
         self.mc = pymycobot.MyCobot("/dev/ttyAMA0", baudrate=1000000)
+        self.mc.set_fresh_mode(0)
         self.lift = [109.51, 25.31, -73.47, -19.16, 5.8, 69.34]
         self.observe = [131.13, 5.53, -50.53, -37.08, 13.27, 91.93]
         self.sub = None
