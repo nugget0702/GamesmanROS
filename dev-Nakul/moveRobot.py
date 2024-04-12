@@ -53,69 +53,67 @@ class Acutate:
 
     def move(self, pose, pickUp=True):
         print("Inside Move: ", pose)
-        while not rospy.is_shutdown():
-            input('Inside Move function, Press [ Enter ]: ')
-            # Set the desired orientation for the end effector HERE
-            self.request.ik_request.pose_stamped.pose = pose
+        input('Inside Move function, Press [ Enter ]: ')
+        # Set the desired orientation for the end effector HERE
+        self.request.ik_request.pose_stamped.pose = pose
+        try:
+            # Send the request to the service
+            response = self.compute_ik(self.request)
+            
+            # Print the response HERE
+            print(response)
 
-            try:
-                # Send the request to the service
-                response = self.compute_ik(self.request)
-                
-                # Print the response HERE
-                print(response)
+            #DEBUG & TODO
+            group = MoveGroupCommander("arm_group")
 
-                #DEBUG & TODO
-                group = MoveGroupCommander("arm_group")
+            # Setting position and orientation target
+            group.set_pose_target(self.request.ik_request.pose_stamped)
 
-                # Setting position and orientation target
-                group.set_pose_target(self.request.ik_request.pose_stamped)
+            # TRY THIS
+            # Setting just the position without specifying the orientation
+            #group.set_position_target([0.5, 0.5, 0.0])
 
-                # TRY THIS
-                # Setting just the position without specifying the orientation
-                #group.set_position_target([0.5, 0.5, 0.0])
+            # Plan IK
+            plan = group.plan()
+            user_input = input("Enter 'y' if the trajectory looks safe on RVIZ")
+            
+            # Execute IK if safe
+            if user_input == 'y':                    
+                if pickUp:
+                    print("Inside Pickup")
 
-                # Plan IK
-                plan = group.plan()
-                user_input = input("Enter 'y' if the trajectory looks safe on RVIZ")
-                
-                # Execute IK if safe
-                if user_input == 'y':                    
-                    if pickUp:
-                        print("Inside Pickup")
+                    # Open the right gripper
+                    print('Opening...')
+                    self.mc.set_gripper_state(0, 20)
+                    rospy.sleep(1.0)
+                    print('Done!')
 
-                        # Open the right gripper
-                        print('Opening...')
-                        self.mc.set_gripper_state(0, 20)
-                        rospy.sleep(1.0)
-                        print('Done!')
+                    print("Plan: ", len(plan), "\n", "Plan 0 : ", plan[0], "\n", "Plan 2 : ", plan[2])
+                    group.go(wait=True)
+                    rospy.sleep(3.0)
+                    # Close the right gripper
+                    print('Closing...')
+                    self.mc.set_gripper_state(1, 20)
+                    rospy.sleep(1.0)
 
-                        print("Plan: ", len(plan), "\n", "Plan 0 : ", plan[0], "\n", "Plan 2 : ", plan[2])
-                        group.execute(plan)
-                        rospy.sleep(3.0)
-                        # Close the right gripper
-                        print('Closing...')
-                        self.mc.set_gripper_state(1, 20)
-                        rospy.sleep(1.0)
+                    #self.mc.send_angles(self.lift, 20)
+                else:
+                    print("Inside Place")
 
-                        #self.mc.send_angles(self.lift, 20)
-                    else:
-                        print("Inside Place")
+                    group.execute(plan[1])
 
-                        group.execute(plan[1])
+                    # Open the right gripper
+                    print('Opening...')
+                    self.mc.set_gripper_state(0, 20)
+                    rospy.sleep(1.0)
+                    print('Done!')
 
-                        # Open the right gripper
-                        print('Opening...')
-                        self.mc.set_gripper_state(0, 20)
-                        rospy.sleep(1.0)
-                        print('Done!')
+                    self.mc.send_angles(self.lift)
 
-                        self.mc.send_angles(self.lift)
+                    # Close the right gripper
+                    print('Closing...')
+                    self.mc.set_gripper_state(1, 20)
+                    rospy.sleep(1.0)
 
-                        # Close the right gripper
-                        print('Closing...')
-                        self.mc.set_gripper_state(1, 20)
-                        rospy.sleep(1.0)
-
-            except rospy.ServiceException as e:
-                print("Service call failed: %s"%e)
+        except rospy.ServiceException as e:
+            print("Service call failed: %s"%e)
