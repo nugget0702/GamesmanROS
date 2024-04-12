@@ -17,6 +17,23 @@ class Acutate:
         self.observe = [126.65, 9.31, -80.85, -13.97, 11.95, 88.76]
         self.sub = None
 
+        # Wait for the IK service to become available
+        rospy.wait_for_service('compute_ik')
+        rospy.init_node('service_query')
+        # Create the function used to call the service
+        self.compute_ik = rospy.ServiceProxy('compute_ik', GetPositionIK)
+
+        # Construct the request
+        self.request = GetPositionIKRequest()
+        self.request.ik_request.group_name = "arm_group"
+
+        # If a Sawyer does not have a gripper, replace '_gripper_tip' with '_wrist' instead
+        #link = "right_gripper_tip"
+
+        #request.ik_request.ik_link_name = link
+        #request.ik_request.attempts = 20
+        self.request.ik_request.pose_stamped.header.frame_id = "joint1"
+
     def pickUp(self, ar_tag_name):
         rospy.init_node('finding_'+ar_tag_name)
         try:
@@ -33,40 +50,15 @@ class Acutate:
         point = findPoint(self, end_coord)
         self.move(point, pickUp=False)
 
-    def move(self, point, pickUp=True):
-        # Wait for the IK service to become available
-        print("Inside move")
-        rospy.wait_for_service('compute_ik')
-        rospy.init_node('service_query')
-        # Create the function used to call the service
-        compute_ik = rospy.ServiceProxy('compute_ik', GetPositionIK)
-
+    def move(self, pose, pickUp=True):
         while not rospy.is_shutdown():
             input('Inside Move function, Press [ Enter ]: ')
-            
-            # Construct the request
-            request = GetPositionIKRequest()
-            request.ik_request.group_name = "arm_group"
-
-            # If a Sawyer does not have a gripper, replace '_gripper_tip' with '_wrist' instead
-            #link = "right_gripper_tip"
-
-            #request.ik_request.ik_link_name = link
-            #request.ik_request.attempts = 20
-            request.ik_request.pose_stamped.header.frame_id = "joint1"
-            
             # Set the desired orientation for the end effector HERE
-            request.ik_request.pose_stamped.pose.position.x = point.x
-            request.ik_request.pose_stamped.pose.position.y = point.y
-            request.ik_request.pose_stamped.pose.position.z = point.z       
-            request.ik_request.pose_stamped.pose.orientation.x = 0.86
-            request.ik_request.pose_stamped.pose.orientation.y = -0.5
-            request.ik_request.pose_stamped.pose.orientation.z = -0.01
-            request.ik_request.pose_stamped.pose.orientation.w = 0.113
-            
+            self.request.ik_request.pose_stamped.pose = pose
+
             try:
                 # Send the request to the service
-                response = compute_ik(request)
+                response = self.compute_ik(self.request)
                 
                 # Print the response HERE
                 print(response)
@@ -75,7 +67,7 @@ class Acutate:
                 group = MoveGroupCommander("arm_group")
 
                 # Setting position and orientation target
-                group.set_pose_target(request.ik_request.pose_stamped)
+                group.set_pose_target(self.request.ik_request.pose_stamped)
 
                 # TRY THIS
                 # Setting just the position without specifying the orientation
