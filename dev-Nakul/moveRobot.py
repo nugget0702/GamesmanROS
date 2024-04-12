@@ -90,7 +90,7 @@ class Acutate:
                         rospy.sleep(1.0)
                         print('Done!')
 
-                        print("Plan: ", len(plan), "\n", "Plan 0 : ", plan[0], "\n", "Plan 1 : ", plan[1])
+                        print("Plan: ", len(plan), "\n", "Plan 0 : ", plan[0], "\n", "Plan 2 : ", plan[2])
                         group.execute(plan)
                         rospy.sleep(3.0)
                         # Close the right gripper
