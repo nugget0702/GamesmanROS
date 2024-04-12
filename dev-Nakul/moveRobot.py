@@ -59,10 +59,10 @@ class Acutate:
             request.ik_request.pose_stamped.pose.position.x = point.x
             request.ik_request.pose_stamped.pose.position.y = point.y
             request.ik_request.pose_stamped.pose.position.z = point.z       
-            request.ik_request.pose_stamped.pose.orientation.x = 0.0
-            request.ik_request.pose_stamped.pose.orientation.y = -1.0
-            request.ik_request.pose_stamped.pose.orientation.z = 0.0
-            request.ik_request.pose_stamped.pose.orientation.w = 0.0
+            request.ik_request.pose_stamped.pose.orientation.x = 0.86
+            request.ik_request.pose_stamped.pose.orientation.y = -0.5
+            request.ik_request.pose_stamped.pose.orientation.z = -0.01
+            request.ik_request.pose_stamped.pose.orientation.w = 0.113
             
             try:
                 # Send the request to the service
