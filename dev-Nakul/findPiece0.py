@@ -74,7 +74,7 @@ def findPiece(ar_frame):
                         "marker0 " + ar_frame,
                         "usb_cam")
       
-      ar_tag_trans = tfBuffer.lookup_transform("usb_cam", "marker0 " + ar_frame, rospy.Time())
+      ar_tag_trans = tfBuffer.lookup_transform("aligned_usb_cam", "marker0 " + ar_frame, rospy.Time())
 
       #TODO MODIFY THIS OFFSET
       # Process trans to get your state error
