@@ -54,7 +54,7 @@ def findPiece(ar_frame):
       input_y = ar_tag_trans.transform.translation.y 
       input_z = ar_tag_trans.transform.translation.z
 
-      tfbr.sendTransform((input_x, input_y, input_z),
+      tfbr.sendTransform((input_x, -input_y, input_z),
                         tf.transformations.quaternion_from_euler(0, 0, 0),
                         rospy.Time.now(),
                         "marker0 " + ar_frame,
