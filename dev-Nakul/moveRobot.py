@@ -35,7 +35,6 @@ class Acutate:
         self.request.ik_request.pose_stamped.header.frame_id = "joint1"
 
     def pickUp(self, ar_tag_name):
-        rospy.init_node('finding_'+ar_tag_name)
         try:
             self.mc.send_angles(self.observe, 20)
             rospy.sleep(2.0)
