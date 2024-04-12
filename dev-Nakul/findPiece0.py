@@ -72,7 +72,7 @@ def findPiece(ar_frame):
                         (0, 0, 0, 1),
                         rospy.Time.now(),
                         "marker0 " + ar_frame,
-                        "usb_cam")
+                        "aligned_usb_cam")
       
       ar_tag_trans = tfBuffer.lookup_transform("aligned_usb_cam", "marker0 " + ar_frame, rospy.Time())
 
