@@ -72,7 +72,7 @@ def findPiece(ar_frame):
 
       piece = Point()
       piece.x = input_x
-      piece.y = -input_y
+      piece.y = input_y
       piece.z = input_z
 
       orientation = Quaternion()
