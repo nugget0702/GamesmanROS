@@ -19,7 +19,7 @@ class Acutate:
 
         # Wait for the IK service to become available
         rospy.wait_for_service('compute_ik')
-        rospy.init_node('service_query')
+        rospy.init_node('service_query', anonymous=True)
         # Create the function used to call the service
         self.compute_ik = rospy.ServiceProxy('compute_ik', GetPositionIK)
 
