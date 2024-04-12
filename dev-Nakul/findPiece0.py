@@ -89,10 +89,10 @@ def findPiece(ar_frame):
       piece.z = input_z
 
       orientation = Quaternion()
-      orientation.x = ar_tag_trans.transform.rotation.x
-      orientation.y = ar_tag_trans.transform.rotation.y
-      orientation.z = ar_tag_trans.transform.rotation.z
-      orientation.w = ar_tag_trans.transform.rotation.w
+      orientation.x = cam_rot_x
+      orientation.y = cam_rot_y
+      orientation.z = cam_rot_z
+      orientation.w = cam_rot_w
 
 
       tf_listener.waitForTransform("joint1", "aligned_usb_cam", rospy.Time(), rospy.Duration(10.0))
