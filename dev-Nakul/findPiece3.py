@@ -53,11 +53,6 @@ def findPiece(ar_frame):
       cam_trans_y = cam_to_base_trans.transform.translation.y
       cam_trans_z = cam_to_base_trans.transform.translation.z
 
-      cam_rot_x = cam_to_base_trans.transform.rotation.x
-      cam_rot_y = cam_to_base_trans.transform.rotation.y
-      cam_rot_z = cam_to_base_trans.transform.rotation.z
-      cam_rot_w = cam_to_base_trans.transform.rotation.w
-
       input_x = ar_tag_trans.transform.translation.x
       input_y = ar_tag_trans.transform.translation.y 
       input_z = ar_tag_trans.transform.translation.z
@@ -97,16 +92,16 @@ def findPiece(ar_frame):
 
       tf_listener.waitForTransform("joint1", "aligned_usb_cam", rospy.Time(), rospy.Duration(10.0))
       center_in_base = tf_listener.transformPoint("joint1", PointStamped(header=Header(stamp=rospy.Time(), frame_id="aligned_usb_cam"), point=piece))
-      orientation_in_base = tf_listener.transformQuaternion("joint1", QuaternionStamped(header=Header(stamp=rospy.Time(), frame_id="aligned_usb_cam"), quaternion=orientation))
+      cam_to_flange = tfBuffer.lookup_transform("aligned_usb_cam", "joint6_flange", rospy.Time())
 
       piece_pose = Pose()
       piece_pose.position.x = center_in_base.point.x
       piece_pose.position.y = center_in_base.point.y
       piece_pose.position.z = center_in_base.point.z
-      piece_pose.orientation.x = orientation_in_base.quaternion.x
-      piece_pose.orientation.y = orientation_in_base.quaternion.y
-      piece_pose.orientation.z = orientation_in_base.quaternion.z
-      piece_pose.orientation.w = orientation_in_base.quaternion.w
+      piece_pose.orientation.x = cam_to_flange.rotation.x
+      piece_pose.orientation.y = cam_to_flange.rotation.y
+      piece_pose.orientation.z = cam_to_flange.rotation.z
+      piece_pose.orientation.w = cam_to_flange.rotation.w
 
 
       #################################### end your code ###############
