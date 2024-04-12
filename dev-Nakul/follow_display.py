@@ -14,7 +14,7 @@ def talker():
     robot = moveRobot.Acutate()
     mycobot = robot.mc
 
-    rospy.init_node("display", anonymous=True)
+    #rospy.init_node("display", anonymous=True)
 
     pub = rospy.Publisher("joint_states", JointState, queue_size=10)
     pub_marker = rospy.Publisher("visualization_marker", Marker, queue_size=10)
