@@ -54,17 +54,26 @@ def findPiece(ar_frame):
       input_y = ar_tag_trans.transform.translation.y 
       input_z = ar_tag_trans.transform.translation.z
 
+      tfbr.sendTransform((input_x, input_y, input_z),
+                        tf.transformations.quaternion_from_euler(0, 0, 0),
+                        rospy.Time.now(),
+                        "marker0 " + ar_frame,
+                        "usb_cam")
       
+      ar_tag_trans = tfBuffer.lookup_transform("usb_cam", "marker0 " + ar_frame, rospy.Time())
+
+      #TODO MODIFY THIS OFFSET
+      # Process trans to get your state error
+
+      input_x = ar_tag_trans.transform.translation.x
+      input_y = ar_tag_trans.transform.translation.y 
+      input_z = ar_tag_trans.transform.translation.z
+
+
       piece = Point()
       piece.x = input_x
       piece.y = -input_y
       piece.z = input_z
-
-      tfbr.sendTransform((input_x, input_y, input_z),
-                        tf.transformations.quaternion_from_euler(0, 0, 0),
-                        rospy.Time.now(),
-                        "marker0",
-                        "usb_cam")
 
       orientation = Quaternion()
       orientation.x = ar_tag_trans.transform.rotation.x
