@@ -9,11 +9,10 @@ from visualization_msgs.msg import Marker
 
 import moveRobot
 
+robot = moveRobot.Acutate()
+mycobot = robot.mc
 
 def talker():
-    robot = moveRobot.Acutate()
-    mycobot = robot.mc
-
     #rospy.init_node("display", anonymous=True)
 
     pub = rospy.Publisher("joint_states", JointState, queue_size=10)

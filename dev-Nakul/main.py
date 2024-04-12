@@ -1,5 +1,6 @@
 import requests
 import moveRobot
+from follow_display import robot
 
 URL = "https://nyc.cs.berkeley.edu/universal/v1/"
 
@@ -103,8 +104,6 @@ pieces["[0.5, 2.5]"] = "ar_marker_3"
 pieces["[1.5, 3.5]"] = "ar_marker_1"
 pieces["[2.5, 3.5]"] = "ar_marker_6"
 
-move = moveRobot.Acutate() 
-
 A_turn = True
 while (len(moves_data) > 0):
     if A_turn:
@@ -122,8 +121,8 @@ while (len(moves_data) > 0):
             user = input("Enter y and Press ENTER: ")
             flag = user == 'y'
         
-        move.pickUp(ar_tag_piece)
-        #moveRobot.place(end_coord)
+        robot.pickUp(ar_tag_piece)
+        #robot.place(end_coord)
 
         Dynamic_URL = Static_URL + new_position
         moves_data = requests.get(url=Dynamic_URL).json()['moves']
@@ -145,8 +144,8 @@ while (len(moves_data) > 0):
             user = input("Enter y and Press ENTER: ")
             flag = user == 'y'
         
-        move.pickUp(ar_tag_piece)
-        #moveRobot.place(end_coord)
+        robot.pickUp(ar_tag_piece)
+        #robot.place(end_coord)
         
         Dynamic_URL = Static_URL + new_position
         moves_data = requests.get(url=Dynamic_URL).json()['moves']
