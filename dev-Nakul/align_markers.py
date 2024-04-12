@@ -21,7 +21,7 @@ def callback(data):
                          new_orientation,
                          rospy.Time.now(),
                          "modified_ar_tag_" + str(marker.id),
-                         "camera_frame") # Assuming the camera frame is the parent frame
+                         "usb_cam") # Assuming the camera frame is the parent frame
 
 if __name__ == '__main__':
     rospy.init_node('modify_ar_tag_axis')
