@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import rospy
 from moveit_msgs.srv import GetPositionIK, GetPositionIKRequest, GetPositionIKResponse
-from geometry_msgs.msg import PoseStamped, Point
+from geometry_msgs.msg import PoseStamped, Point, Pose
 from moveit_commander import MoveGroupCommander
 import numpy as np
 from numpy import linalg
@@ -40,7 +40,7 @@ class Acutate:
             self.mc.send_angles(self.observe, 20)
             rospy.sleep(2.0)
 
-            self.sub = rospy.Subscriber('/piece_location_' + ar_tag_name, Pose, self.move, queue_size=10)
+            self.sub = rospy.Subscriber('/piece_location_' + ar_tag_name, Pose, self.move)
         except:
             print("Could not locate piece : " + ar_tag_name)
             return
