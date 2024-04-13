@@ -1,7 +1,6 @@
 import moveRobot
 from geometry_msgs.msg import PoseStamped, Point, Pose
-
-acutation = moveRobot.Acutate()
+from follow_display import robot
 
 piece_pose = Pose()
 piece_pose.position.x = -0.002
@@ -12,4 +11,4 @@ piece_pose.orientation.y = 1
 piece_pose.orientation.z = 0 
 piece_pose.orientation.w = 0
 
-acutation.move(piece_pose)
+robot.move(piece_pose)

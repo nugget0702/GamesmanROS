@@ -64,10 +64,10 @@ class Acutate:
         pose.position.y = (((end_coord[1] - 1) * self.scaling) + self.y_offset) / 1000
         pose.position.z = self.place_z / 1000
 
-        pose.orientation.x = 0.5
-        pose.orientation.y = -0.5
-        pose.orientation.z = -0.5
-        pose.orientation.w = 0.5
+        pose.orientation.x = 0
+        pose.orientation.y = 1
+        pose.orientation.z = 0
+        pose.orientation.w = 0
 
         #TODO findPoint
         #point = findPoint(self, end_coord)
