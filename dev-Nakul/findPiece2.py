@@ -89,11 +89,10 @@ def findPiece(ar_frame):
       piece_pose.position.x = center_in_base.point.x
       piece_pose.position.y = center_in_base.point.y
       piece_pose.position.z = center_in_base.point.z
-      piece_pose.orientation.x = orientation_in_base.quaternion.x
-      piece_pose.orientation.y = orientation_in_base.quaternion.y
-      piece_pose.orientation.z = orientation_in_base.quaternion.z
-      piece_pose.orientation.w = orientation_in_base.quaternion.w
-
+      piece_pose.orientation.x = 0
+      piece_pose.orientation.y = 1
+      piece_pose.orientation.z = 0
+      piece_pose.orientation.w = 0
 
       #################################### end your code ###############
       pub.publish(piece_pose)

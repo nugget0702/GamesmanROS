@@ -2,6 +2,7 @@
 import rospy
 from moveit_msgs.srv import GetPositionIK, GetPositionIKRequest, GetPositionIKResponse
 from geometry_msgs.msg import PoseStamped, Point, Pose
+from std_msgs.msg import String
 from moveit_commander import MoveGroupCommander
 import numpy as np
 from numpy import linalg
@@ -17,6 +18,14 @@ class Acutate:
         self.lift = [109.51, 25.31, -73.47, -19.16, 5.8, 69.34]
         self.observe = [131.13, 5.53, -50.53, -37.08, 13.27, 91.93]
         self.sub = None
+        self.pub = rospy.Publisher('/piece', String, queue_size=10)
+
+        self.board_size = 150
+        self.dim = 3
+        self.scaling = self.board_size/self.dim
+        self.x_offset = self.board_size/2
+        self.y_offset = 100
+        self.place_z = 150
 
         # Wait for the IK service to become available
         rospy.wait_for_service('compute_ik')
@@ -38,8 +47,10 @@ class Acutate:
     def pickUp(self, ar_tag_name):
         try:
             print("Inside pickUP : ", ar_tag_name)
+            self.pub.publish(ar_tag_name)
+            rospy.sleep(1.0)
             self.mc.send_angles(self.observe, 20)
-            rospy.sleep(2.0)
+            rospy.sleep(1.0)
 
             self.sub = rospy.Subscriber('/piece_location_' + ar_tag_name, Pose, self.move)
         except:
@@ -47,9 +58,20 @@ class Acutate:
             return
         
     def place(self, end_coord):
+        pose = Pose()
+        pose.position.x = ((end_coord[0] - 1) * self.scaling) - self.x_offset
+        pose.position.y = ((end_coord[1] - 1) * self.scaling) + self.y_offset
+        pose.position.z = self.place_z
+
+        pose.orientation.x = 0
+        pose.orientation.y = 1
+        pose.orientation.z = 0
+        pose.orientation.w = 0
+
         #TODO findPoint
-        point = findPoint(self, end_coord)
-        self.move(point, pickUp=False)
+        #point = findPoint(self, end_coord)
+
+        self.move(pose, pickUp=False)
 
     def move(self, pose, pickUp=True):
         print("Inside Move: ", pose)
@@ -82,22 +104,22 @@ class Acutate:
                 if pickUp:
                     print("Inside Pickup")
 
-                    # Open the right gripper
-                    # print('Opening...')
-                    # self.mc.set_gripper_state(0, 20)
-                    # rospy.sleep(1.0)
-                    # print('Done!')
+                    #Open the right gripper
+                    print('Opening...')
+                    self.mc.set_gripper_state(0, 20)
+                    rospy.sleep(1.0)
+                    print('Done!')
 
-                    #print("Plan: ", len(plan), "\n", "Plan 0 : ", plan[0], "\n", "Plan 2 : ", plan[2])
-                    group.execute(plan[1])
+                    print("Plan 1 : ", len(plan[1]), plan[1])
+                    group.go()
                     rospy.sleep(3.0)
 
-                    # # Close the right gripper
-                    # print('Closing...')
-                    # self.mc.set_gripper_state(1, 20)
-                    # rospy.sleep(1.0)
+                    # Close the right gripper
+                    print('Closing...')
+                    self.mc.set_gripper_state(1, 20)
+                    rospy.sleep(1.0)
 
-                    #self.mc.send_angles(self.lift, 20)
+                    self.mc.send_angles(self.lift, 20)
                 else:
                     print("Inside Place")
 
@@ -109,7 +131,7 @@ class Acutate:
                     rospy.sleep(1.0)
                     print('Done!')
 
-                    self.mc.send_angles(self.lift)
+                    self.mc.send_angles(self.observe)
 
                     # Close the right gripper
                     print('Closing...')

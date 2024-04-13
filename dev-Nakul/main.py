@@ -122,7 +122,7 @@ while (len(moves_data) > 0):
             flag = user == 'y'
         
         robot.pickUp(ar_tag_piece)
-        #robot.place(end_coord)
+        robot.place(move_coords[1])
 
         Dynamic_URL = Static_URL + new_position
         moves_data = requests.get(url=Dynamic_URL).json()['moves']
@@ -130,7 +130,6 @@ while (len(moves_data) > 0):
         A_turn = False
     else:
         new_position = pick_best_position(moves_data)
-        print(starting_position, new_position)
         move_coords = position_to_coord(starting_position, new_position)
         start_coord, end_coord = (str(move_coords[0]), str(move_coords[1]))
 
@@ -145,7 +144,7 @@ while (len(moves_data) > 0):
             flag = user == 'y'
         
         robot.pickUp(ar_tag_piece)
-        #robot.place(end_coord)
+        robot.place(move_coords[1])
         
         Dynamic_URL = Static_URL + new_position
         moves_data = requests.get(url=Dynamic_URL).json()['moves']

@@ -15,7 +15,7 @@ import numpy as np
 import tf
 
 from geometry_msgs.msg import Point, PointStamped, Quaternion, QuaternionStamped, Pose
-from std_msgs.msg import Header
+from std_msgs.msg import Header, String
 
 #Define the method which contains the main functionality of the node.
 def findPiece(ar_frame):
@@ -29,7 +29,7 @@ def findPiece(ar_frame):
   ################################### YOUR CODE HERE ##############
 
   #Create a publisher and a tf buffer, which is primed with a tf listener
-  pub = rospy.Publisher('/piece_location_' + ar_frame, Pose, queue_size=10)
+  pub = rospy.Publisher('/piece_location', Pose, queue_size=10)
   tfBuffer = tf2_ros.Buffer()
   tfListener = tf2_ros.TransformListener(tfBuffer)
 
@@ -65,10 +65,10 @@ def findPiece(ar_frame):
       tfbr.sendTransform((input_x, -input_y+0.05, 0),
                         (0, 0, 0, 1),
                         rospy.Time.now(),
-                        "marker0 " + ar_frame,
+                        "aligned_" + ar_frame,
                         "aligned_usb_cam")
       
-      ar_tag_trans = tfBuffer.lookup_transform("aligned_usb_cam", "marker0 " + ar_frame, rospy.Time())
+      ar_tag_trans = tfBuffer.lookup_transform("aligned_usb_cam", "aligned_" + ar_frame, rospy.Time())
 
       #TODO MODIFY THIS OFFSET
       # Process trans to get your state error
@@ -92,7 +92,6 @@ def findPiece(ar_frame):
 
       tf_listener.waitForTransform("joint1", "aligned_usb_cam", rospy.Time(), rospy.Duration(10.0))
       center_in_base = tf_listener.transformPoint("joint1", PointStamped(header=Header(stamp=rospy.Time(), frame_id="aligned_usb_cam"), point=piece))
-      orientation_in_base = tf_listener.transformQuaternion("joint1", QuaternionStamped(header=Header(stamp=rospy.Time(), frame_id="joint6_flange"), quaternion=orientation))
 
       piece_pose = Pose()
       piece_pose.position.x = center_in_base.point.x
@@ -121,9 +120,10 @@ if __name__ == '__main__':
 
   #Run this program as a new node in the ROS computation graph 
   #called /turtlebot_controller.
-  rospy.init_node('piece_locator0', anonymous=True)
+
+  rospy.init_node('piece_locator', anonymous=True)
 
   try:
-    findPiece(sys.argv[1])
+    rospy.Subscriber('/piece', String, findPiece)
   except rospy.ROSInterruptException:
     pass

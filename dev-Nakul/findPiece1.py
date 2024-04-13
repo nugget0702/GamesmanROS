@@ -44,15 +44,24 @@ def findPiece(ar_frame):
   # Loop until the node is killed with Ctrl-C
   while not rospy.is_shutdown():
     try:
+      cam_to_base_trans = tfBuffer.lookup_transform("joint1", "usb_cam", rospy.Time())
       ar_tag_trans = tfBuffer.lookup_transform("usb_cam", ar_frame, rospy.Time())
 
       #TODO MODIFY THIS OFFSET
       # Process trans to get your state error
+      cam_trans_x = cam_to_base_trans.transform.translation.x
+      cam_trans_y = cam_to_base_trans.transform.translation.y
+      cam_trans_z = cam_to_base_trans.transform.translation.z
 
       input_x = ar_tag_trans.transform.translation.x
       input_y = ar_tag_trans.transform.translation.y 
       input_z = ar_tag_trans.transform.translation.z
 
+      tfbr.sendTransform((cam_trans_x, cam_trans_y, cam_trans_z),
+                        (0, 0, 0, 1),
+                        rospy.Time.now(),
+                        "aligned_usb_cam",
+                        "joint1")
       tfbr.sendTransform((input_x, -input_y+0.05, 0),
                         (0, 0, 0, 1),
                         rospy.Time.now(),
@@ -89,10 +98,10 @@ def findPiece(ar_frame):
       piece_pose.position.x = center_in_base.point.x
       piece_pose.position.y = center_in_base.point.y
       piece_pose.position.z = center_in_base.point.z
-      piece_pose.orientation.x = orientation_in_base.quaternion.x
-      piece_pose.orientation.y = orientation_in_base.quaternion.y
-      piece_pose.orientation.z = orientation_in_base.quaternion.z
-      piece_pose.orientation.w = orientation_in_base.quaternion.w
+      piece_pose.orientation.x = 0
+      piece_pose.orientation.y = 1
+      piece_pose.orientation.z = 0
+      piece_pose.orientation.w = 0
 
 
       #################################### end your code ###############
