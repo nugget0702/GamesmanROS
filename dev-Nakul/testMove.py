@@ -5,7 +5,7 @@ acutation = moveRobot.Acutate()
 
 piece_pose = Pose()
 piece_pose.position.x = -0.002
-piece_pose.position.y = 0.13
+piece_pose.position.y = 0.20
 piece_pose.position.z = 0.20
 piece_pose.orientation.x = 0
 piece_pose.orientation.y = 1
