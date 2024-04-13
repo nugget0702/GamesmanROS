@@ -110,7 +110,7 @@ while (len(moves_data) > 0):
         move_coords = position_to_coord(starting_position, new_position)
 
         print("A : ", move_coords)
-        flag = False
+        flag = True
         while not flag:
             user = input("Enter y and Press ENTER: ")
             flag = user == 'y'
@@ -126,7 +126,7 @@ while (len(moves_data) > 0):
         move_coords = position_to_coord(starting_position, new_position)
 
         print("B : ", move_coords)
-        flag = False
+        flag = True
         while not flag:
             user = input("Enter y and Press ENTER: ")
             flag = user == 'y'
