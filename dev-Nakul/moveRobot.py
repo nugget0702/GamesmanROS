@@ -9,6 +9,7 @@ import numpy as np
 from numpy import linalg
 import sys
 import pymycobot
+import time
 
 
 class Acutate:
@@ -59,18 +60,18 @@ class Acutate:
         
     def place(self, end_coord):
         pose = Pose()
-        pose.position.x = ((end_coord[0] - 1) * self.scaling) - self.x_offset
-        pose.position.y = ((end_coord[1] - 1) * self.scaling) + self.y_offset
-        pose.position.z = self.place_z
+        pose.position.x = (((end_coord[0] - 1) * self.scaling) - self.x_offset) / 1000
+        pose.position.y = (((end_coord[1] - 1) * self.scaling) + self.y_offset) / 1000
+        pose.position.z = self.place_z / 1000
 
-        pose.orientation.x = 0
-        pose.orientation.y = 1
-        pose.orientation.z = 0
-        pose.orientation.w = 0
+        pose.orientation.x = 0.5
+        pose.orientation.y = 0.5
+        pose.orientation.z = 0.5
+        pose.orientation.w = 0.5
 
         #TODO findPoint
         #point = findPoint(self, end_coord)
-
+        print("Inside Place: ", pose)
         self.move(pose, pickUp=False)
 
     def move(self, pose, pickUp=True):
@@ -97,7 +98,7 @@ class Acutate:
                     #Open the right gripper
                     print('Opening...')
                     self.mc.set_gripper_state(0, 20)
-                    rospy.sleep(1.0)
+                    time.sleep(1)
                     print('Done!')
 
                     data = plan[1].joint_trajectory.points[-1].positions
@@ -108,13 +109,15 @@ class Acutate:
                         data_list.append(radians_to_angles)
                     rospy.loginfo(rospy.get_caller_id() + "%s", data_list)
                     self.mc.send_angles(data_list, 25)
+                    time.sleep(3)
 
                     # Close the right gripper
                     print('Closing...')
                     self.mc.set_gripper_state(1, 20)
-                    rospy.sleep(1.0)
+                    time.sleep(1)
 
                     self.mc.send_angles(self.lift, 20)
+                    time.sleep(3)
                 else:
                     print("Inside Place")
 
@@ -126,19 +129,21 @@ class Acutate:
                         data_list.append(radians_to_angles)
                     rospy.loginfo(rospy.get_caller_id() + "%s", data_list)
                     self.mc.send_angles(data_list, 25)
+                    time.sleep(3)
 
                     # Open the right gripper
                     print('Opening...')
                     self.mc.set_gripper_state(0, 20)
-                    rospy.sleep(1.0)
+                    time.sleep(1)
                     print('Done!')
 
-                    self.mc.send_angles(self.observe)
+                    self.mc.send_angles(self.observe, 20)
+                    time.sleep(3)
 
                     # Close the right gripper
                     print('Closing...')
                     self.mc.set_gripper_state(1, 20)
-                    rospy.sleep(1.0)
+                    time.sleep(1)
 
         except rospy.ServiceException as e:
             print("Service call failed: %s"%e)
