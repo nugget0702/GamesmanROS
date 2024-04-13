@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import math
 import rospy
 from moveit_msgs.srv import GetPositionIK, GetPositionIKRequest, GetPositionIKResponse
 from geometry_msgs.msg import PoseStamped, Point, Pose
@@ -79,21 +80,11 @@ class Acutate:
         # Set the desired orientation for the end effector HERE
         self.request.ik_request.pose_stamped.pose = pose
         try:
-            # Send the request to the service
-            response = self.compute_ik(self.request)
-            
-            # Print the response HERE
-            print(response)
-
             #DEBUG & TODO
             group = MoveGroupCommander("arm_group")
 
             # Setting position and orientation target
             group.set_pose_target(self.request.ik_request.pose_stamped)
-
-            # TRY THIS
-            # Setting just the position without specifying the orientation
-            #group.set_position_target([0.5, 0.5, 0.0])
 
             # Plan IK
             plan = group.plan()
@@ -110,9 +101,14 @@ class Acutate:
                     rospy.sleep(1.0)
                     print('Done!')
 
-                    print("Plan 1 : ", plan[1].joint_trajectory.points[-1].positions)
-                    group.go()
-                    rospy.sleep(3.0)
+                    data = plan[1].joint_trajectory.points[-1].positions
+
+                    data_list = []
+                    for index, value in enumerate(data):
+                        radians_to_angles = round(math.degrees(value), 2)
+                        data_list.append(radians_to_angles)
+                    rospy.loginfo(rospy.get_caller_id() + "%s", data_list)
+                    self.mc.send_angles(data_list, 25)
 
                     # Close the right gripper
                     print('Closing...')
@@ -123,7 +119,14 @@ class Acutate:
                 else:
                     print("Inside Place")
 
-                    group.execute(plan[1])
+                    data = plan[1].joint_trajectory.points[-1].positions
+
+                    data_list = []
+                    for index, value in enumerate(data):
+                        radians_to_angles = round(math.degrees(value), 2)
+                        data_list.append(radians_to_angles)
+                    rospy.loginfo(rospy.get_caller_id() + "%s", data_list)
+                    self.mc.send_angles(data_list, 25)
 
                     # Open the right gripper
                     print('Opening...')
