@@ -20,7 +20,6 @@ class Acutate:
         self.lift = [109.51, 25.31, -73.47, -19.16, 5.8, 69.34]
         self.observe = [139.3, -0.17, -46.23, -37.88, 10.45, 113.55]
         self.sub = None
-        self.pub = rospy.Publisher('/piece', String, queue_size=10)
 
         self.board_size = 150
         self.dim = 3
@@ -48,12 +47,10 @@ class Acutate:
     def pickUp(self, ar_tag_name):
         try:
             print("Inside pickUP : ", ar_tag_name)
-            self.pub.publish(ar_tag_name)
-            rospy.sleep(1.0)
             self.mc.send_angles(self.observe, 20)
             rospy.sleep(1.0)
 
-            self.sub = rospy.Subscriber('/piece_location', Pose, self.move)
+            self.sub = rospy.Subscriber('/piece_location_' + ar_tag_name, Pose, self.move)
         except:
             print("Could not locate piece : " + ar_tag_name)
             return
