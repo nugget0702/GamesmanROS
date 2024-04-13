@@ -125,5 +125,6 @@ if __name__ == '__main__':
 
   try:
     rospy.Subscriber('/piece', String, findPiece)
+    rospy.spin()
   except rospy.ROSInterruptException:
     pass
