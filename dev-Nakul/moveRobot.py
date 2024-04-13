@@ -110,7 +110,7 @@ class Acutate:
                     rospy.sleep(1.0)
                     print('Done!')
 
-                    print("Plan 1 : ", plan[1])
+                    print("Plan 1 : ", plan[1].joint_trajectory.points[-1].positions)
                     group.go()
                     rospy.sleep(3.0)
 
