@@ -115,7 +115,7 @@ while (len(moves_data) > 0):
             user = input("Enter y and Press ENTER: ")
             flag = user == 'y'
         
-        #moveRobotPi.play(move_coords[0], move_coords[1])
+        moveRobotPi.play(move_coords[0], move_coords[1])
 
         Dynamic_URL = Static_URL + new_position
         moves_data = requests.get(url=Dynamic_URL).json()['moves']
@@ -131,7 +131,7 @@ while (len(moves_data) > 0):
             user = input("Enter y and Press ENTER: ")
             flag = user == 'y'
         
-        #moveRobotPi.play(move_coords[0], move_coords[1])
+        moveRobotPi.play(move_coords[0], move_coords[1])
         
         Dynamic_URL = Static_URL + new_position
         moves_data = requests.get(url=Dynamic_URL).json()['moves']

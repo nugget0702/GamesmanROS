@@ -48,7 +48,7 @@ def play(before, after):
     mc.send_angles(mapping["lift"], 20)
     time.sleep(delay)
 
-    if after[0] + 1 == 4.5 or after[1] == 0.5:
+    if after == None:
         after = [4.5, 1.5]
 
     mc.send_angles(mapping[str([after[0] + 1, after[1]])], 20)
