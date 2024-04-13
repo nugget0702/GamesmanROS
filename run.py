@@ -1,6 +1,5 @@
 import requests
 import moveRobotPi
-import moveRobot
 
 URL = "https://nyc.cs.berkeley.edu/universal/v1/"
 
@@ -95,6 +94,15 @@ def pick_best_position(moves):
         print('error: in pick_best_postion')
         exit()
 
+pieces = {str(c) : "" for c in centers}
+
+#Initialize Board Pieces
+#TODO
+pieces["[0.5, 1.5]"] = "ar_marker_0"
+pieces["[0.5, 2.5]"] = "ar_marker_3"
+pieces["[1.5, 3.5]"] = "ar_marker_1"
+pieces["[2.5, 3.5]"] = "ar_marker_6"
+
 A_turn = True
 while (len(moves_data) > 0):
     if A_turn:
@@ -106,7 +114,8 @@ while (len(moves_data) > 0):
         while not flag:
             user = input("Enter y and Press ENTER: ")
             flag = user == 'y'
-        moveRobotPi.play(move_coords[0], move_coords[1])
+        
+        #moveRobotPi.play(move_coords[0], move_coords[1])
 
         Dynamic_URL = Static_URL + new_position
         moves_data = requests.get(url=Dynamic_URL).json()['moves']
@@ -114,7 +123,6 @@ while (len(moves_data) > 0):
         A_turn = False
     else:
         new_position = pick_best_position(moves_data)
-        print(starting_position, new_position)
         move_coords = position_to_coord(starting_position, new_position)
 
         print("B : ", move_coords)
@@ -122,9 +130,9 @@ while (len(moves_data) > 0):
         while not flag:
             user = input("Enter y and Press ENTER: ")
             flag = user == 'y'
-        moveRobotPi.play(move_coords[0], move_coords[1])
         
-
+        #moveRobotPi.play(move_coords[0], move_coords[1])
+        
         Dynamic_URL = Static_URL + new_position
         moves_data = requests.get(url=Dynamic_URL).json()['moves']
         starting_position = new_position
