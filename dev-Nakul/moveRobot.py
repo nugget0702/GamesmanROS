@@ -17,7 +17,7 @@ class Acutate:
     def __init__(self):
         self.mc = pymycobot.MyCobot("/dev/ttyAMA0", baudrate=1000000)
         self.lift = [109.51, 25.31, -73.47, -19.16, 5.8, 69.34]
-        self.observe = [131.13, 5.53, -50.53, -37.08, 13.27, 91.93]
+        self.observe = [139.3, -0.17, -46.23, -37.88, 10.45, 113.55]
         self.sub = None
         self.pub = rospy.Publisher('/piece', String, queue_size=10)
 
@@ -115,7 +115,7 @@ class Acutate:
                     self.mc.set_gripper_state(1, 20)
                     time.sleep(1)
 
-                    self.mc.send_angles(self.lift, 20)
+                    self.mc.send_angles(self.observe, 20)
                     time.sleep(3)
                 else:
                     print("Inside Place")
