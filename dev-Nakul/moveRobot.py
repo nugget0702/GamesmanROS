@@ -65,8 +65,8 @@ class Acutate:
         pose.position.z = self.place_z / 1000
 
         pose.orientation.x = 0.5
-        pose.orientation.y = 0.5
-        pose.orientation.z = 0.5
+        pose.orientation.y = -0.5
+        pose.orientation.z = -0.5
         pose.orientation.w = 0.5
 
         #TODO findPoint
