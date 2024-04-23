@@ -89,9 +89,9 @@ def readBoard():
     
     def real_to_ideal(x, y):
         def shift_left(x):
-            return (x + 0.0075) * 200
+            return (x + 0.075) * 20
         def shift_down(y):
-            return (y - 0.1) * 200
+            return (y - 0.1) * 20
         return [shift_left(x), shift_down(y)]
     
     def getIndex(x, y):
