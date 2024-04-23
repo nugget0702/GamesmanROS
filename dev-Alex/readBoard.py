@@ -40,7 +40,7 @@ def readBoard():
         return indice
     
     boardState = '1_---------'
-    armarkers = [0,1,3,6]
+    armarkers = ["ar_marker_0", "ar_marker_1", "ar_marker_3", "ar_marker_6"]
     for armarker in armarkers:
         coord1 = findCoord(armarker)
         index = getIndex(coord1[0], coord1[1])
@@ -51,7 +51,7 @@ def readBoard():
 
 
 while True:
-    
+
     board = readBoard()
     print(board)
 
