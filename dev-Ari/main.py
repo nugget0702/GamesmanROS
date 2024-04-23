@@ -1,6 +1,7 @@
 import requests
 import moveRobot
 from follow_display import robot
+import math
 
 URL = "https://nyc.cs.berkeley.edu/universal/v1/"
 
@@ -36,7 +37,13 @@ centers = variants_data["imageAutoGUIData"]["themes"][theme]["centers"]
 
 # Input: starting position string and ending position string
 # Output: List of start coord and end cood [[x1, y1], [x2, y2]]
-
+def board_to_board(x, y):
+    def shift_left(x):
+        return x - 0.05/2 - 0.05
+    def shift_down(y):
+        return y - 0.01
+    return [shift_left(x), shift_down(y)]
+    
 
 def position_to_coord(start, end):
     start_cord = None
@@ -77,6 +84,31 @@ Dynamic_URL = Static_URL + starting_position
 moves_data = requests.get(url=Dynamic_URL).json()['moves']
 
 
+def readBoard():
+    
+    boardState = '1_---------'
+    
+    def real_to_ideal(x, y):
+        def shift_left(x):
+            return (x + 0.0075) * 200
+        def shift_down(y):
+            return (y - 0.1) * 200
+        return [shift_left(x), shift_down(y)]
+    
+    def getIndex(x, y):
+        x, y = real_to_ideal(x, y)
+        y = 3 - y
+        x = math.ceil(x)
+        y = math.floor(y)
+        indice = x + 3*y
+        return indice
+    
+    #how to read the qr code to find where the qr code is on the board
+    
+    
+
+    #get the board
+
 def pick_best_position(moves):
     position_values = {}
     for i in range(len(moves)):
@@ -105,6 +137,8 @@ pieces["[1.5, 3.5]"] = "ar_marker_1"
 pieces["[2.5, 3.5]"] = "ar_marker_6"
 
 A_turn = True
+no_human = False
+
 while (len(moves_data) > 0):
     if A_turn:
         new_position = pick_best_position(moves_data)
@@ -129,24 +163,30 @@ while (len(moves_data) > 0):
         starting_position = new_position
         A_turn = False
     else:
-        new_position = pick_best_position(moves_data)
-        move_coords = position_to_coord(starting_position, new_position)
-        start_coord, end_coord = (str(move_coords[0]), str(move_coords[1]))
+        if no_human:
+            new_position = pick_best_position(moves_data)
+            move_coords = position_to_coord(starting_position, new_position)
+            start_coord, end_coord = (str(move_coords[0]), str(move_coords[1]))
 
-        ar_tag_piece = pieces[start_coord]
-        pieces[end_coord] = ar_tag_piece
-        pieces[start_coord] = ""
+            ar_tag_piece = pieces[start_coord]
+            pieces[end_coord] = ar_tag_piece
+            pieces[start_coord] = ""
 
-        print("B : ", move_coords, ar_tag_piece)
-        flag = False
-        while not flag:
-            user = input("Enter y and Press ENTER: ")
-            flag = user == 'y'
-        
-        robot.pickUp(ar_tag_piece)
-        robot.place(move_coords[1])
-        
-        Dynamic_URL = Static_URL + new_position
-        moves_data = requests.get(url=Dynamic_URL).json()['moves']
-        starting_position = new_position
-        A_turn = True
+            print("B : ", move_coords, ar_tag_piece)
+            flag = False
+            while not flag:
+                user = input("Enter y and Press ENTER: ")
+                flag = user == 'y'
+            
+            robot.pickUp(ar_tag_piece)
+            robot.place(move_coords[1])
+            
+            Dynamic_URL = Static_URL + new_position
+            moves_data = requests.get(url=Dynamic_URL).json()['moves']
+            starting_position = new_position
+            A_turn = True
+        else:
+            #give user time to play move
+            starting_position = readBoard()
+            
+            
