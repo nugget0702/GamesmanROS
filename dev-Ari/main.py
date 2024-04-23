@@ -158,6 +158,8 @@ while (len(moves_data) > 0):
                     y = math.floor(y)
                     indice = x + 3*y
                     return indice
+                
+                
                 #how to read the qr code to find where the qr code is on the board
     
             starting_position = readBoard()
