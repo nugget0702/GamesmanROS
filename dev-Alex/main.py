@@ -1,6 +1,10 @@
 import requests
 import moveRobotPi
 import math
+import time
+
+from geometry_msgs.msg import PoseStamped, Point, Pose
+import rospy
 
 URL = "https://nyc.cs.berkeley.edu/universal/v1/"
 
@@ -73,7 +77,10 @@ def findCoord(armarker):
     '''
     Takes in armarker 1, 3, 6, or 0 and returns its fuzzy (real) coordinates
     '''
-    return armarker.position
+    def getCurrentCord(Pose):
+        return Pose.position
+
+    rospy.Subscriber('/piece_location_' + armarker, Pose, getCurrentCord) 
 
 def readBoard():
     '''
@@ -84,7 +91,7 @@ def readBoard():
     5. Updates the Boardstate 
     6. Updates MoveData and A_Turn = True because Human has finished moving 
     '''
-    
+
     def real_to_ideal(x, y):
         def shift_left(x):
             return (x + 0.075) * 20
@@ -105,7 +112,7 @@ def readBoard():
     armarkers = [0,1,3,6]
     for armarker in armarkers:
         coord1 = findCoord(armarker)
-        index = getIndex(coord[0], coord[1])
+        index = getIndex(coord1[0], coord1[1])
         boardState[index + 1] = 'x' if armarker in [1,6] else 'o'
 
     return boardState
@@ -184,13 +191,11 @@ while (len(moves_data) > 0):
             A_turn = True
 
         else:
-
             #human v ai
-
             last_position = starting_position
             while starting_position == last_position:
                 starting_position = readBoard()
-                Time.sleep(5)
+                time.sleep(5)
             
             Dynamic_URL = Static_URL + starting_position
             moves_data = requests.get(url=Dynamic_URL).json()['moves']
