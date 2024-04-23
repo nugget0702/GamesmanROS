@@ -4,19 +4,6 @@ from geometry_msgs.msg import PoseStamped, Point, Pose
 import rospy
 
 
-def findCoord(armarker):
-    '''
-    Takes in armarker 1, 3, 6, or 0 and returns its fuzzy (real) coordinates
-    '''
-    print(armarker)
-
-    def getCurrentCord(pose):
-        print(pose)
-        return pose.position
-
-    rospy.init_node("read_board", anonymous=True)
-    rospy.Subscriber('/piece_location_' + armarker, Pose, getCurrentCord) 
-
 def readBoard():
     '''
     1. Initializes a boardstate and list of ar_markers: done
@@ -26,6 +13,7 @@ def readBoard():
     5. Updates the Boardstate 
     6. Updates MoveData and A_Turn = True because Human has finished moving 
     '''
+    coord1 = None
 
     def real_to_ideal(x, y):
         def shift_left(x):
@@ -43,10 +31,24 @@ def readBoard():
         indice = x + 3*y
         return indice
     
+    def findCoord(armarker):
+        '''
+        Takes in armarker 1, 3, 6, or 0 and returns its fuzzy (real) coordinates
+        '''
+        print(armarker)
+
+        def getCurrentCord(pose):
+            coord1 = pose.position
+            print(coord1)
+
+        rospy.init_node("read_board", anonymous=True)
+        rospy.Subscriber('/piece_location_' + armarker, Pose, getCurrentCord) 
+        print("Done!")
+    
     boardState = '1_---------'
     armarkers = ["ar_marker_0", "ar_marker_1", "ar_marker_3", "ar_marker_6"]
     for armarker in armarkers:
-        coord1 = findCoord(armarker)
+        findCoord(armarker)
         index = getIndex(coord1[0], coord1[1])
         boardState[index + 1] = 'x' if armarker in [1,6] else 'o'
 
