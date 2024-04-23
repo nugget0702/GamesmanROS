@@ -144,6 +144,7 @@ while (len(moves_data) > 0):
             last_position = starting_position
             while starting_position == last_position:
                 starting_position = readBoard()
+                Time.sleep(5)
             
             Dynamic_URL = Static_URL + starting_position
             moves_data = requests.get(url=Dynamic_URL).json()['moves']
