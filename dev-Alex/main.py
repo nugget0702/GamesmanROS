@@ -69,6 +69,48 @@ def coor_to_position(postion, start, end):
 ###############################################################################
 ################################################################################
 
+def findCoord(armarker):
+    '''
+    Takes in armarker 1, 3, 6, or 0 and returns its fuzzy (real) coordinates
+    '''
+    return armarker.position
+
+def readBoard():
+    '''
+    1. Initializes a boardstate and list of ar_markers: done
+    2. Calls FindCoord and stores real/fuzzy values for all the armarkers on the board: 
+    3. Converts fuzzy values to ideal values using real_to_ideal (real = fuzzy)
+    4. Converts ideal values to indices using getIndex
+    5. Updates the Boardstate 
+    6. Updates MoveData and A_Turn = True because Human has finished moving 
+    '''
+    
+    def real_to_ideal(x, y):
+        def shift_left(x):
+            return (x + 0.075) * 20
+        def shift_down(y):
+            return (y - 0.1) * 20
+        return [shift_left(x), shift_down(y)]
+    
+    
+    def getIndex(x, y):
+        x, y = real_to_ideal(x, y)
+        y = 3 - y
+        x = math.ceil(x)
+        y = math.floor(y)
+        indice = x + 3*y
+        return indice
+    
+    boardState = '1_---------'
+    armarkers = [0,1,3,6]
+    for armarker in armarkers:
+        coord1 = findCoord(armarker)
+        index = getIndex(coord[0], coord[1])
+        boardState[index + 1] = 'x' if armarker in [1,6] else 'o'
+
+    return boardState
+    
+    
 
 # Work here!
 Dynamic_URL = Static_URL + starting_position
@@ -140,7 +182,11 @@ while (len(moves_data) > 0):
             moves_data = requests.get(url=Dynamic_URL).json()['moves']
             starting_position = new_position
             A_turn = True
+
         else:
+
+            #human v ai
+
             last_position = starting_position
             while starting_position == last_position:
                 starting_position = readBoard()
@@ -153,30 +199,7 @@ while (len(moves_data) > 0):
 def findCoord(armarker):
     
                 
-def readBoard():
-    boardState = '1_---------'
-    armarkers = [0,1,3,6]
-    for armarker in armarkers:
-        coord1 = findCoord(armarker)
-        index = getIndex(coord[0], coord[1])
-        boardState[index + 1] = 'x' if armarker in [1,6] else 'o'
-    return boardState
-    
-    def real_to_ideal(x, y):
-        def shift_left(x):
-            return (x + 0.075) * 20
-        def shift_down(y):
-            return (y - 0.1) * 20
-        return [shift_left(x), shift_down(y)]
-    
-    
-    def getIndex(x, y):
-        x, y = real_to_ideal(x, y)
-        y = 3 - y
-        x = math.ceil(x)
-        y = math.floor(y)
-        indice = x + 3*y
-        return indice
+
     
                    
         
