@@ -141,25 +141,45 @@ while (len(moves_data) > 0):
             starting_position = new_position
             A_turn = True
         else:
-            def readBoard():
-                boardState = '1_---------'
-                def real_to_ideal(x, y):
-                    def shift_left(x):
-                        return (x + 0.075) * 20
-                    def shift_down(y):
-                        return (y - 0.1) * 20
-                    return [shift_left(x), shift_down(y)]
-                
-                
-                def getIndex(x, y):
-                    x, y = real_to_ideal(x, y)
-                    y = 3 - y
-                    x = math.ceil(x)
-                    y = math.floor(y)
-                    indice = x + 3*y
-                    return indice
-                #how to read the qr code to find where the qr code is on the board
+            last_position = starting_position
+            while starting_position == last_position:
+                starting_position = readBoard()
+            
+            Dynamic_URL = Static_URL + starting_position
+            moves_data = requests.get(url=Dynamic_URL).json()['moves']
+            A_turn = True
+
+def findCoord(armarker):
     
-            starting_position = readBoard()
+                
+def readBoard():
+    boardState = '1_---------'
+    armarkers = [0,1,3,6]
+    for armarker in armarkers:
+        coord1 = findCoord(armarker)
+        x, y = real_to_ideal(coord1[0], coord1[1])
+        index = getIndex(x, y)
+        boardState[index + 1] = 'x' if armarker in [1,6] else 'o'
+    return boardState
+    
+    def real_to_ideal(x, y):
+        def shift_left(x):
+            return (x + 0.075) * 20
+        def shift_down(y):
+            return (y - 0.1) * 20
+        return [shift_left(x), shift_down(y)]
+    
+    
+    def getIndex(x, y):
+        x, y = real_to_ideal(x, y)
+        y = 3 - y
+        x = math.ceil(x)
+        y = math.floor(y)
+        indice = x + 3*y
+        return indice
+    
+                   
+        
+                
             
             
