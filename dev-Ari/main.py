@@ -34,17 +34,6 @@ Static_URL = URL + "/positions/?p="
 theme = list(variants_data["imageAutoGUIData"]["themes"].keys())[0]
 centers = variants_data["imageAutoGUIData"]["themes"][theme]["centers"]
 ###############################################################################
-
-# Input: starting position string and ending position string
-# Output: List of start coord and end cood [[x1, y1], [x2, y2]]
-def board_to_board(x, y):
-    def shift_left(x):
-        return x - 0.05/2 - 0.05
-    def shift_down(y):
-        return y - 0.01
-    return [shift_left(x), shift_down(y)]
-    
-
 def position_to_coord(start, end):
     start_cord = None
     end_cord = None
