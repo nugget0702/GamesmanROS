@@ -9,11 +9,14 @@ def findCoord(armarker):
     Takes in armarker 1, 3, 6, or 0 and returns its fuzzy (real) coordinates
     '''
     print(armarker)
+    
     def getCurrentCord(pose):
         print(pose)
         return pose.position
 
+    rospy.init_node("read_board", anonymous=True)
     rospy.Subscriber('/piece_location_' + armarker, Pose, getCurrentCord) 
+    rospy.spin()
 
 def readBoard():
     '''
