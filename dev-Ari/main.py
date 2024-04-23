@@ -85,7 +85,6 @@ moves_data = requests.get(url=Dynamic_URL).json()['moves']
 
 
 def readBoard():
-    
     boardState = '1_---------'
     
     def real_to_ideal(x, y):
