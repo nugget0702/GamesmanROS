@@ -73,25 +73,6 @@ Dynamic_URL = Static_URL + starting_position
 moves_data = requests.get(url=Dynamic_URL).json()['moves']
 
 
-def readBoard():
-    boardState = '1_---------'
-    
-    def real_to_ideal(x, y):
-        def shift_left(x):
-            return (x + 0.075) * 20
-        def shift_down(y):
-            return (y - 0.1) * 20
-        return [shift_left(x), shift_down(y)]
-    
-    def getIndex(x, y):
-        x, y = real_to_ideal(x, y)
-        y = 3 - y
-        x = math.ceil(x)
-        y = math.floor(y)
-        indice = x + 3*y
-        return indice
-    
-    #how to read the qr code to find where the qr code is on the board
     
     
 
@@ -174,7 +155,25 @@ while (len(moves_data) > 0):
             starting_position = new_position
             A_turn = True
         else:
-            #give user time to play move
+            def readBoard():
+                boardState = '1_---------'
+                def real_to_ideal(x, y):
+                    def shift_left(x):
+                        return (x + 0.075) * 20
+                    def shift_down(y):
+                        return (y - 0.1) * 20
+                    return [shift_left(x), shift_down(y)]
+                
+                
+                def getIndex(x, y):
+                    x, y = real_to_ideal(x, y)
+                    y = 3 - y
+                    x = math.ceil(x)
+                    y = math.floor(y)
+                    indice = x + 3*y
+                    return indice
+                #how to read the qr code to find where the qr code is on the board
+    
             starting_position = readBoard()
             
             
