@@ -106,6 +106,30 @@ pieces["[2.5, 3.5]"] = "ar_marker_6"
 
 A_turn = True
 no_human = True
+def process(starting_position, Static_URL, position_to_coord, new_position):
+    move_coords = position_to_coord(starting_position, new_position)
+
+    print("B : ", move_coords)
+    flag = True
+    while not flag:
+        user = input("Enter y and Press ENTER: ")
+        flag = user == 'y'
+            
+    moveRobotPi.play(move_coords[0], move_coords[1])
+            
+    Dynamic_URL = Static_URL + new_position
+    moves_data = requests.get(url=Dynamic_URL).json()['moves']
+    starting_position = new_position
+    A_turn = True
+
+def human_pick_move(moves_data):
+    print("Pick the index of the move you want to play: ")
+    for i in range(len(moves_data)):
+        print(i, " : ", moves_data[i]['position'])
+    user_move = int(input())
+    return moves_data[user_move]['position']
+
+
 while (len(moves_data) > 0):
     if A_turn:
         new_position = pick_best_position(moves_data)
@@ -126,21 +150,15 @@ while (len(moves_data) > 0):
     else:
         if no_human:
             new_position = pick_best_position(moves_data)
-            move_coords = position_to_coord(starting_position, new_position)
+            process(starting_position, Static_URL, position_to_coord, new_position)
 
-            print("B : ", move_coords)
-            flag = True
-            while not flag:
-                user = input("Enter y and Press ENTER: ")
-                flag = user == 'y'
-            
-            moveRobotPi.play(move_coords[0], move_coords[1])
-            
-            Dynamic_URL = Static_URL + new_position
-            moves_data = requests.get(url=Dynamic_URL).json()['moves']
-            starting_position = new_position
-            A_turn = True
         else:
+            new_position = human_pick_move(moves_data)
+            process(starting_position, Static_URL, position_to_coord, new_position)
+
+
+
+
             def readBoard():
                 boardState = '1_---------'
                 def real_to_ideal(x, y):
