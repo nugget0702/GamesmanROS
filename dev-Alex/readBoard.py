@@ -8,8 +8,10 @@ def findCoord(armarker):
     '''
     Takes in armarker 1, 3, 6, or 0 and returns its fuzzy (real) coordinates
     '''
-    def getCurrentCord(Pose):
-        return Pose.position
+    print(armarker)
+    def getCurrentCord(pose):
+        print(pose)
+        return pose.position
 
     rospy.Subscriber('/piece_location_' + armarker, Pose, getCurrentCord) 
 
