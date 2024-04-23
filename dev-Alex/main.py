@@ -157,8 +157,7 @@ def readBoard():
     armarkers = [0,1,3,6]
     for armarker in armarkers:
         coord1 = findCoord(armarker)
-        x, y = real_to_ideal(coord1[0], coord1[1])
-        index = getIndex(x, y)
+        index = getIndex(coord[0], coord[1])
         boardState[index + 1] = 'x' if armarker in [1,6] else 'o'
     return boardState
     
