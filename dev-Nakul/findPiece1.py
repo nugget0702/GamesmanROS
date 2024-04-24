@@ -57,11 +57,6 @@ def findPiece(ar_frame):
       input_y = ar_tag_trans.transform.translation.y 
       input_z = ar_tag_trans.transform.translation.z
 
-      tfbr.sendTransform((cam_trans_x, cam_trans_y, cam_trans_z),
-                        (0, 0, 0, 1),
-                        rospy.Time.now(),
-                        "aligned_usb_cam",
-                        "joint1")
       tfbr.sendTransform((input_x, -input_y+0.05, 0),
                         (0, 0, 0, 1),
                         rospy.Time.now(),
