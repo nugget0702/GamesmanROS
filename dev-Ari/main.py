@@ -105,7 +105,7 @@ pieces["[1.5, 3.5]"] = "ar_marker_1"
 pieces["[2.5, 3.5]"] = "ar_marker_6"
 
 A_turn = True
-no_human = True
+no_human = False
 def process(starting_position, Static_URL, position_to_coord, new_position):
     move_coords = position_to_coord(starting_position, new_position)
 
