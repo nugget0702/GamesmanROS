@@ -31,15 +31,15 @@ def readBoard():
         indice = x + 3*y
         return indice
     
+    def getCurrentCord(pose):
+        coord1 = pose.position
+        print(coord1)
+    
     def findCoord(armarker):
         '''
         Takes in armarker 1, 3, 6, or 0 and returns its fuzzy (real) coordinates
         '''
         print(armarker)
-
-        def getCurrentCord(pose):
-            coord1 = pose.position
-            print(coord1)
 
         rospy.init_node("read_board", anonymous=True)
         rospy.Subscriber('/piece_location_' + armarker, Pose, getCurrentCord) 
