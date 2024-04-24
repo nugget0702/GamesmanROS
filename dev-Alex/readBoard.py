@@ -43,6 +43,7 @@ def readBoard():
 
         rospy.init_node("read_board", anonymous=True)
         rospy.Subscriber('/piece_location_' + armarker, Pose, getCurrentCord) 
+        print(coord1)
         print("Done!")
     
     boardState = '1_---------'
