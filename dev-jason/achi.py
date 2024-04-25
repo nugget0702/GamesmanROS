@@ -35,7 +35,8 @@ starting_position = static_data["startPosition"]
 # Input: starting position string and ending position string
 # Output: List of start coord and end cood [[x1, y1], [x2, y2]]
 
-achi_coord_map = {10: 1.5, 50: 2.5, 90: 3.5}
+achi_col_coord_map = {10: 1.5, 50: 2.5, 90: 3.5}
+achi_row_coord_map = {10: 3.5, 50: 2.5, 90: 1.5}
 
 def position_to_coord_achi(start, end):
     moves = []
@@ -55,11 +56,11 @@ def position_to_coord_achi(start, end):
             if start[i] != end[i]:
                 if start[i] != "-" and end[i] != "-":
                     moves.append([centers[i], [-1, -1]])
-                    end_cord = [achi_coord_map[centers[i][0]], achi_coord_map[centers[i][1]]] 
+                    end_cord = [achi_col_coord_map[centers[i][0]], achi_row_coord_map[centers[i][1]]] 
                 elif start[i] == "-":
-                    end_cord = [achi_coord_map[centers[i][0]], achi_coord_map[centers[i][1]]] 
+                    end_cord = [achi_col_coord_map[centers[i][0]], achi_row_coord_map[centers[i][1]]] 
                 else:
-                    start_cord = [achi_coord_map[centers[i][0]], achi_coord_map[centers[i][1]]]
+                    start_cord = [achi_col_coord_map[centers[i][0]], achi_row_coord_map[centers[i][1]]]
         moves.append([start_cord, end_cord])
         return moves
 
