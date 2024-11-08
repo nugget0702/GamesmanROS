@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1> {% block title %} Choose Variants {% endblock %}</h1>
+
+{% if post['game_index'] == 4 %} {# Variant for Achi game #}
+    <form action="{{ url_for('handle') }}" method="POST">
+        <input type="hidden" id="variant_index" name="variant_index" value="0">
+        <input type="submit" value="Regular" class="btn btn-primary">
+    </form>
+{% elif post['game_index'] == 16 %} {# Variant for Connect4 game #}
+    <form action="{{ url_for('handle') }}" method="POST">
+        <input type="hidden" id="variant_index" name="variant_index" value="0">
+        <input type="submit" value="6x6" class="btn btn-primary">
+    </form>
+
+    <hr>
+
+    <form action="{{ url_for('handle') }}" method="POST">
+        <input type="hidden" id="variant_index" name="variant_index" value="1">
+        <input type="submit" value="6x7" class="btn btn-primary">
+    </form>
+{% endif %}
+
+{% endblock %}
