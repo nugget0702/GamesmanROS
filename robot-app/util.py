@@ -3,11 +3,9 @@ import requests
 
 BASE_URL = "https://nyc.cs.berkeley.edu/universal/v1/"
 
-# Achi
-achi_col_coord_map = {10: 1, 50: 2, 90: 3}
-achi_row_coord_map = {10: 3, 50: 2, 90: 1}
+achi_col_coord_map = {10: 1.5, 50: 2.5, 90: 3.5}
+achi_row_coord_map = {10: 3.5, 50: 2.5, 90: 1.5}
 
-# Connect 4 (6x6 and 6x7)
 connect4_col_coord_map = {0.5: 1, 1.5: 2, 2.5: 3, 3.5: 4, 4.5: 5, 5.5: 6, 6.5: 7}
 connect4_row_coord_map = {1.5: 6, 2.5: 5, 3.5: 4, 4.5: 3, 5.5: 2, 6.5: 1}
 
@@ -72,7 +70,7 @@ def achi_position_to_coord(start, end, centers, _):
     moves = []
     # For achi, start_cord is always outside the board when the value is None so that the robot can pickup new pieces.
     # Once the start_cord is not grab_new_piece, then we can move pieces within the board.
-    start_cord = "out_of_board"
+    start_cord = "grab_new_piece"
     end_cord = None
 
     start = start[2:]
@@ -97,7 +95,7 @@ def achi_position_to_coord(start, end, centers, _):
 def connect4_position_to_coord(start, end, centers, variant):
     moves = []
     # For connect 4, you are always grabbing a new piece, similar to the grabbing new piece part of achi.
-    start_cord = "out_of_board"
+    start_cord = "grab_new_piece"
     end_cord = None
 
     start = start[2:]

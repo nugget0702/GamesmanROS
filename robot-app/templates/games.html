@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1> {% block title %} Suite of Games {% endblock %}</h1>
+
+<div class="card-deck">  <!-- Using Bootstrap's card-deck for alignment -->
+
+  <!-- First Card -->
+  <div class="card">
+    <div class="card-body text-center">
+      <h5 class="card-title">Achi</h5>
+      <form action="{{ url_for('variants') }}" method="POST">
+        <input type="hidden" id="game_index" name="game_index" value="4">
+        <input type="submit" value="Play Achi" class="btn btn-primary">
+      </form>
+    </div>
+  </div>
+
+  <!-- Second Card -->
+  <div class="card">
+    <div class="card-body text-center">
+      <h5 class="card-title">Connect 4</h5>
+      <form action="{{ url_for('variants') }}" method="POST">
+        <input type="hidden" id="game_index" name="game_index" value="16">
+        <input type="submit" value="Play Connect 4" class="btn btn-primary">
+      </form>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

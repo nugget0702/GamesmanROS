@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1> {% block title %} Ready for a robot adventure?  {% endblock %}</h1>
+
+<div class="center-form">
+    <form action="{{ url_for('games') }}" method="POST">
+      <input type="submit" value="Yes" class="btn btn-primary">
+    </form>
+  </div>
+
+{% endblock %}

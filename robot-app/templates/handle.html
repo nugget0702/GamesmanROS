@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form action="{{ url_for('start') }}" method="POST" style="margin-top: -100px;">
+    <input type="submit" value="Turn On Robot" class="btn btn-primary">
+</form>
+
+<hr>
+
+{% if post['is_started'] %}
+<form action="{{ url_for('move') }}" method="POST">
+    <input type="submit" value="Execute a Robot Move" class="btn btn-primary">
+</form>
+{% else %}
+<form action="{{ url_for('move') }}" method="POST">
+    <input disabled type="submit" value="Execute Move" class="btn btn-primary">
+</form>
+{% endif %}
+
+
+<hr>
+
+<form method="post">
+    <div class="form-group">
+        <label for="content">Messages</label>
+        <textarea readonly name="content" placeholder="" style="height: 100px;"
+                  class="form-control" style="border-radius: 20px; background-color: #3498db; color: white;">{{ request.form['content'] or post['content']}}</textarea>
+    </div>
+</form>
+
+{% endblock %}

@@ -30,41 +30,74 @@ def games():
     return render_template('games.html')
 
 
-@app.route('/variants', methods=('POST',))
+@app.route('/variants', methods=('GET', 'POST'))
 def variants():
-    game_index = int(request.form['game_index'])
-    data = {
-        "game_index": game_index,
-    }
-    session['game_index'] = game_index
-    return render_template('variants.html', post=data)
+    if request.method == 'POST':
+        try:
+            game_index = int(request.form['game_index'])
+        except ValueError:
+            flash("Invalid game index", "error")
+            return redirect(url_for('index'))  # Redirect back to the index if there is an error
+        
+        session['game_index'] = game_index
+        return redirect(url_for('variants', game_index=game_index))  # Redirect to the same page after POST
+        
+    # Handle GET request here
+    game_index = request.args.get('game_index', type=int)
+    if game_index:
+        session['game_index'] = game_index
+    return render_template('variants.html', post={"game_index": game_index})
 
-@app.route('/handle', methods=('POST',))
+
+
+@app.route('/handle', methods=['GET', 'POST'])
 def handle():
-    variant_index = int(request.form['variant_index'])
-    session['variant_index'] = variant_index
-    data = {
-        "content": "",
-        "is_started": False,
-    }
-    return render_template('handle.html', post=data)
+    if request.method == 'POST':
+        # Handle POST request
+        try:
+            variant_index = int(request.form['variant_index'])
+            session['variant_index'] = variant_index
+        except ValueError:
+            flash("Invalid variant index", "error")
+            return redirect(url_for('index'))
 
-@app.route('/start', methods=('POST',))
+        data = {
+            "content": "",
+            "is_started": False,
+        }
+        return render_template('handle.html', post=data)
+    
+    # Handle GET request (optional, can provide default data or another page behavior)
+    return render_template('handle.html', post={"content": "", "is_started": False})
+
+
+@app.route('/start', methods=['GET', 'POST'])
 def start():
-    game_index = session['game_index']
-    variant_index = session['variant_index']
-    static_URL, centers, starting_position, moves_data = initialize_game(game_index, variant_index)
-    session['static_URL'] = static_URL
-    session['centers'] = centers
-    session['starting_position'] = starting_position
-    session['moves_data'] = moves_data
-    session['A_turn'] = True
-    msg = f"Initialized {get_game_name(game_index)} Successfully!"
+    if request.method == 'POST':
+        # Handle POST request (initialize game)
+        game_index = session['game_index']
+        variant_index = session['variant_index']
+        static_URL, centers, starting_position, moves_data = initialize_game(game_index, variant_index)
+        session['static_URL'] = static_URL
+        session['centers'] = centers
+        session['starting_position'] = starting_position
+        session['moves_data'] = moves_data
+        session['A_turn'] = True
+        msg = f"Initialized game {get_game_name(game_index)} successfully!"
+        session['start_message'] = msg
+        
+    return redirect(url_for('handle_started'))
+
+@app.route('/handle_started', methods=['GET'])
+def handle_started():
+    msg = session.pop('start_message', "")
     data = {
         "content": msg,
         "is_started": True,
     }
+    # Handle GET request (optional, can provide default data or page behavior)
     return render_template('handle.html', post=data)
+
 
 @app.route('/move', methods=('POST',))
 def move():

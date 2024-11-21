@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1> {% block title %} Choose Variant {% endblock %}</h1>
+
+<div class="card-deck">  <!-- Using Bootstrap's card-deck for alignment -->
+
+  {% if post['game_index'] == 4 %} {# Variant for Achi game #}
+    <div class="card">
+      <div class="card-body text-center">
+        <h5 class="card-title">Achi Variant</h5>
+        <form action="{{ url_for('handle') }}" method="POST">
+          <input type="hidden" id="variant_index" name="variant_index" value="0">
+          <input type="submit" value="Regular" class="btn btn-primary">
+        </form>
+      </div>
+    </div>
+  {% elif post['game_index'] == 16 %} {# Variant for Connect4 game #}
+    <div class="card">
+      <div class="card-body text-center">
+        <h5 class="card-title">Connect 4 Variant 6x6</h5>
+        <form action="{{ url_for('handle') }}" method="POST">
+          <input type="hidden" id="variant_index" name="variant_index" value="0">
+          <input type="submit" value="6x6" class="btn btn-primary">
+        </form>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="card">
+      <div class="card-body text-center">
+        <h5 class="card-title">Connect 4 Variant 6x7</h5>
+        <form action="{{ url_for('handle') }}" method="POST">
+          <input type="hidden" id="variant_index" name="variant_index" value="1">
+          <input type="submit" value="6x7" class="btn btn-primary">
+        </form>
+      </div>
+    </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}
